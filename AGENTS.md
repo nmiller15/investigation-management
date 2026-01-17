@@ -1,4 +1,4 @@
-# Oliver Investigations - Agent Guidelines
+# Investigation Management - Agent Guidelines
 
 This repository contains a PostgreSQL database schema for an investigations management system. All code is SQL-based with database migrations and setup scripts.
 
