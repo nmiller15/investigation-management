@@ -1,10 +1,53 @@
 # Investigation Management - Agent Guidelines
 
-This repository contains a PostgreSQL database schema for an investigations management system. All code is SQL-based with database migrations and setup scripts.
+This repository contains a full-stack .NET application with PostgreSQL database for an investigations management system. The solution includes a Razor Pages web UI, minimal API backend, and shared models layer, all built on a comprehensive PostgreSQL database schema.
+
+## .NET Project Structure
+
+### Architecture Overview
+The solution follows a layered architecture with three main projects:
+
+1. **Investigations.Models** - Class library containing domain models, DTOs, and service interfaces
+2. **Investigations.App** - Minimal API project with business logic and service implementations
+3. **Investigations.Web** - Razor Pages web UI that consumes shared services from App project
+
+### Dependency Flow
+```
+Investigations.Web → Investigations.App → Investigations.Models
+```
+
+- **Web project** depends on App and Models (can consume services directly or call API endpoints)
+- **App project** depends on Models (contains service layer and API endpoints)
+- **Models project** has no dependencies (pure domain models and interfaces)
+
+### Project Organization
+- **Models/**: Domain entities, DTOs, request/response models, service interfaces
+- **App/Services/**: Business logic and service implementations
+- **App/Controllers/**: Minimal API endpoints
+- **Web/Pages/**: Razor Pages UI
+- **Web/Services/**: UI-specific service adapters (if needed)
 
 ## Build/Development Commands
 
-This is a PostgreSQL database project. Commands are typically run via psql or migration tools:
+### .NET Commands
+```bash
+# Build entire solution
+dotnet build
+
+# Run specific projects
+dotnet run --project Investigations.App
+dotnet run --project Investigations.Web
+
+# Run tests (when test projects are added)
+dotnet test
+
+# Create new migrations (when Entity Framework is added)
+dotnet ef migrations add MigrationName --project Investigations.App
+dotnet ef database update --project Investigations.App
+```
+
+### Database Commands
+This project uses PostgreSQL with SQL migrations. Commands are typically run via psql:
 
 ```bash
 # Create database and setup roles
@@ -60,6 +103,46 @@ psql -U app_user -d core -f db/seeds/005_sample_contacts.sql
 ### Views
 - Views are created for all major entities (v_cases, v_subjects, v_clients, etc.)
 - Views provide simplified access to related data
+
+## C# Code Style Guidelines
+
+### Naming Conventions
+- **Classes**: PascalCase (e.g., `InvestigationCase`, `UserService`)
+- **Interfaces**: PascalCase with `I` prefix (e.g., `IUserService`, `IRepository<T>`)
+- **Methods**: PascalCase (e.g., `GetCaseById`, `CreateUser`)
+- **Properties**: PascalCase (e.g., `CaseId`, `FirstName`, `IsActive`)
+- **Fields**: camelCase with underscore prefix for private fields (e.g., `_dbContext`, `_logger`)
+- **Constants**: PascalCase (e.g., `MaxRetryCount`, `DefaultPageSize`)
+- **Namespaces**: PascalCase (e.g., `Investigations.Models`, `Investigations.App.Services`)
+
+### File Organization
+- **One class per file** with matching filename
+- **Folder structure** follows namespace hierarchy
+- **Models**: `Investigations.Models/Entities/`, `Investigations.Models/DTOs/`, `Investigations.Models/Interfaces/`
+- **Services**: `Investigations.App/Services/`, `Investigations.App/Repositories/`
+- **Controllers**: `Investigations.App/Controllers/`
+- **Pages**: `Investigations.Web/Pages/` organized by feature
+
+### Code Patterns
+- **Async/Await**: Use async methods for I/O operations (database, HTTP calls)
+- **Dependency Injection**: Constructor injection for services
+- **Repository Pattern**: Use generic repositories for data access
+- **DTO Pattern**: Separate domain models from API contracts
+- **Validation**: Use Data Annotations or FluentValidation
+
+### Entity Framework Guidelines
+- **DbContext**: Named `InvestigationDbContext` in App project
+- **Entities**: Map to database tables with proper navigation properties
+- **Migrations**: Use descriptive names and review before applying
+- **Queries**: Use async methods (ToListAsync, FirstOrDefaultAsync, etc.)
+- **Transactions**: Use DbContext transaction for multi-entity operations
+
+### API Development
+- **Minimal APIs**: Use endpoint definitions in App project
+- **HTTP Methods**: Proper use of GET, POST, PUT, DELETE
+- **Status Codes**: Return appropriate HTTP status codes
+- **Error Handling**: Use problem details for API errors
+- **Documentation**: Include XML comments for OpenAPI generation
 
 ## SQL Code Style Guidelines
 
@@ -122,7 +205,21 @@ psql -U app_user -d core -f db/seeds/005_sample_contacts.sql
 
 ## Testing
 
-Since this is a database schema project, testing typically involves:
+### .NET Testing
+```bash
+# Run all tests in solution
+dotnet test
+
+# Run tests for specific project
+dotnet test Investigations.Models.Tests
+dotnet test Investigations.App.Tests
+dotnet test Investigations.Web.Tests
+
+# Run tests with coverage
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+### Database Testing
 - Schema validation against DBML diagram
 - Data integrity testing with sample data
 - Performance testing on views and queries
@@ -130,11 +227,14 @@ Since this is a database schema project, testing typically involves:
 
 ## Notes for Agents
 
-- This is a PostgreSQL-only project
-- No application code exists - only database schema
-- All changes should be made via new migration files
+- This is a PostgreSQL-only project with .NET application layer
+- Database schema is complete; application code needs to be implemented
+- All database changes should be made via new migration files
 - Never modify existing migrations directly
-- Follow the established naming and formatting conventions
+- Follow the established naming and formatting conventions for both SQL and C#
 - Consider data privacy and security when making changes
 - Complete business-specific codes in seeds/001_codes.sql before running seed data
 - ASP.NET Identity password hashes must be generated via application code for admin user
+- Use dependency injection for all services and repositories
+- Follow async/await patterns for database operations
+- Entity Framework should be added to replace raw SQL queries in application code
