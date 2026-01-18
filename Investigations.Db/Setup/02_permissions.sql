@@ -1,5 +1,5 @@
-GRANT CONNECTION ON DATABASE core TO app_user;
-
+-- app_user Permissions for Application Access
+GRANT CONNECT ON DATABASE core TO app_user;
 GRANT USAGE ON SCHEMA public TO app_user;
 
 GRANT SELECT, INSERT, UPDATE, DELETE 

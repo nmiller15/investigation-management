@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS notifications (
-    notification_id UUID PRIMARY KEY DEFAULT get_random_uuid(),
+    notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     subject VARCHAR(100) NOT NULL,
     description TEXT,
     assigned_to_user_id UUID,

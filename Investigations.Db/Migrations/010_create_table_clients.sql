@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS clients (
-    client_id UUID PRIMARY KEY DEFAULT get_random_uuid(),
+    client_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     client_name VARCHAR(100) NOT NULL,
     primary_contact_id UUID,
     inserted_datetime TIMESTAMPTZ NOT NULL DEFAULT now(),

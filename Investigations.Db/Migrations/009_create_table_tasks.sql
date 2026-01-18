@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tasks (
-    task_id UUID PRIMARY KEY DEFAULT get_random_uuid(),
+    task_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     task_name VARCHAR(100) NOT NULL,
     task_description TEXT, 
     case_id UUID,

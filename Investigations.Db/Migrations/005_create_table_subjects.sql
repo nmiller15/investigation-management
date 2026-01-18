@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS subjects (
-    subject_id UUID PRIMARY KEY DEFAULT get_random_uuid(),
+    subject_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     marital_status_code_key INT, 

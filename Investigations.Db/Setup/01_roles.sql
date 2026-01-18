@@ -6,5 +6,5 @@ ALTER DATABASE core
     OWNER TO admin;
 
 -- Passwords set out of band:
--- ALTER ROLE admin PASSWORD 'your-admin-password';
--- ALTER ROLE app_user PASSWORD 'your-app-password';
+-- ALTER ROLE "admin" PASSWORD 'your-admin-password';
+-- ALTER ROLE "app_user" PASSWORD 'your-app-password';

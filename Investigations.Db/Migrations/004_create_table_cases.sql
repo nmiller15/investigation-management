@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS cases (
-    case_id UUID PRIMARY KEY DEFAULT get_random_uuid(),
+    case_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     case_number VARCHAR(15) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     subject_id UUID,
