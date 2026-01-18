@@ -11,28 +11,23 @@
 --     email,
 --     birthdate,
 --     password_hash,
---     password_salt,
 --     role_code_key,
 --     inserted_by_user_id
 -- ) VALUES (
 --     'System',
 --     'Administrator',
---     'admin@oliverinvestigations.com',
+--     'admin@nolanmiller.me',
 --     '1980-01-01',
 --     -- ASP.NET Identity password hash placeholder
 --     -- Replace this with actual ASP.NET generated hash for "admin" password
 --     '\x_asp_net_hash_placeholder',
---     -- ASP.NET Identity password salt placeholder  
---     -- Replace this with actual ASP.NET generated salt
---     '\x_asp_net_salt_placeholder',
---     -- Replace 'ADMIN' with your actual admin role code
 --     (SELECT code_key FROM codes WHERE code_type = 'ROLE' AND code = 'ADMIN'),
---     NULL -- First record has no inserted_by_user_id
+--     '00000000-0000-0000-0000-000000000000'::uuid -- First record has no inserted_by_user_id
 -- );
 
 -- After inserting admin user, update the codes to reference this user:
--- UPDATE codes SET inserted_by_user_id = (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com') 
--- WHERE inserted_by_user_id IS NULL;
+-- UPDATE codes SET inserted_by_user_id = (SELECT user_id FROM users WHERE email = 'admin@nolanmiller.me') 
+-- WHERE inserted_by_user_id IS '00000000-0000-0000-0000-000000000000'::uuid;
 
 -- INSTRUCTIONS:
 -- 1. Add your ROLE codes to 001_codes.sql first
