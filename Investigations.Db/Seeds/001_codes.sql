@@ -2,138 +2,137 @@
 -- ISO-compliant codes for US states, territories, and North American countries
 -- Run this first as other seed files depend on these codes
 
--- Insert statement will reference admin_user_id
--- This value should be updated after admin user is created in 002_admin_user.sql
+-- Insert statement will reference admin user with key 100
+-- Admin user will be created in 002_admin_user.sql with key 100
 
 -- ==== US STATES (ISO 3166-2:US) ====
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('STATE', 'AL', 'Alabama', 'AL', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'AK', 'Alaska', 'AK', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'AZ', 'Arizona', 'AZ', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'AR', 'Arkansas', 'AR', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'CA', 'California', 'CA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'CO', 'Colorado', 'CO', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'CT', 'Connecticut', 'CT', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'DE', 'Delaware', 'DE', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'FL', 'Florida', 'FL', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'GA', 'Georgia', 'GA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'HI', 'Hawaii', 'HI', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'ID', 'Idaho', 'ID', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'IL', 'Illinois', 'IL', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'IN', 'Indiana', 'IN', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'IA', 'Iowa', 'IA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'KS', 'Kansas', 'KS', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'KY', 'Kentucky', 'KY', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'LA', 'Louisiana', 'LA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'ME', 'Maine', 'ME', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MD', 'Maryland', 'MD', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MA', 'Massachusetts', 'MA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MI', 'Michigan', 'MI', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MN', 'Minnesota', 'MN', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MS', 'Mississippi', 'MS', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MO', 'Missouri', 'MO', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MT', 'Montana', 'MT', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NE', 'Nebraska', 'NE', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NV', 'Nevada', 'NV', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NH', 'New Hampshire', 'NH', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NJ', 'New Jersey', 'NJ', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NM', 'New Mexico', 'NM', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NY', 'New York', 'NY', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'NC', 'North Carolina', 'NC', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'ND', 'North Dakota', 'ND', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'OH', 'Ohio', 'OH', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'OK', 'Oklahoma', 'OK', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'OR', 'Oregon', 'OR', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'PA', 'Pennsylvania', 'PA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'RI', 'Rhode Island', 'RI', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'SC', 'South Carolina', 'SC', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'SD', 'South Dakota', 'SD', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'TN', 'Tennessee', 'TN', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'TX', 'Texas', 'TX', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'UT', 'Utah', 'UT', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'VT', 'Vermont', 'VT', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'VA', 'Virginia', 'VA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'WA', 'Washington', 'WA', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'WV', 'West Virginia', 'WV', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'WI', 'Wisconsin', 'WI', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'WY', 'Wyoming', 'WY', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'DC', 'District of Columbia', 'DC', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('STATE', 'AL', 'Alabama', 'AL', 100),
+('STATE', 'AK', 'Alaska', 'AK', 100),
+('STATE', 'AZ', 'Arizona', 'AZ', 100),
+('STATE', 'AR', 'Arkansas', 'AR', 100),
+('STATE', 'CA', 'California', 'CA', 100),
+('STATE', 'CO', 'Colorado', 'CO', 100),
+('STATE', 'CT', 'Connecticut', 'CT', 100),
+('STATE', 'DE', 'Delaware', 'DE', 100),
+('STATE', 'FL', 'Florida', 'FL', 100),
+('STATE', 'GA', 'Georgia', 'GA', 100),
+('STATE', 'HI', 'Hawaii', 'HI', 100),
+('STATE', 'ID', 'Idaho', 'ID', 100),
+('STATE', 'IL', 'Illinois', 'IL', 100),
+('STATE', 'IN', 'Indiana', 'IN', 100),
+('STATE', 'IA', 'Iowa', 'IA', 100),
+('STATE', 'KS', 'Kansas', 'KS', 100),
+('STATE', 'KY', 'Kentucky', 'KY', 100),
+('STATE', 'LA', 'Louisiana', 'LA', 100),
+('STATE', 'ME', 'Maine', 'ME', 100),
+('STATE', 'MD', 'Maryland', 'MD', 100),
+('STATE', 'MA', 'Massachusetts', 'MA', 100),
+('STATE', 'MI', 'Michigan', 'MI', 100),
+('STATE', 'MN', 'Minnesota', 'MN', 100),
+('STATE', 'MS', 'Mississippi', 'MS', 100),
+('STATE', 'MO', 'Missouri', 'MO', 100),
+('STATE', 'MT', 'Montana', 'MT', 100),
+('STATE', 'NE', 'Nebraska', 'NE', 100),
+('STATE', 'NV', 'Nevada', 'NV', 100),
+('STATE', 'NH', 'New Hampshire', 'NH', 100),
+('STATE', 'NJ', 'New Jersey', 'NJ', 100),
+('STATE', 'NM', 'New Mexico', 'NM', 100),
+('STATE', 'NY', 'New York', 'NY', 100),
+('STATE', 'NC', 'North Carolina', 'NC', 100),
+('STATE', 'ND', 'North Dakota', 'ND', 100),
+('STATE', 'OH', 'Ohio', 'OH', 100),
+('STATE', 'OK', 'Oklahoma', 'OK', 100),
+('STATE', 'OR', 'Oregon', 'OR', 100),
+('STATE', 'PA', 'Pennsylvania', 'PA', 100),
+('STATE', 'RI', 'Rhode Island', 'RI', 100),
+('STATE', 'SC', 'South Carolina', 'SC', 100),
+('STATE', 'SD', 'South Dakota', 'SD', 100),
+('STATE', 'TN', 'Tennessee', 'TN', 100),
+('STATE', 'TX', 'Texas', 'TX', 100),
+('STATE', 'UT', 'Utah', 'UT', 100),
+('STATE', 'VT', 'Vermont', 'VT', 100),
+('STATE', 'VA', 'Virginia', 'VA', 100),
+('STATE', 'WA', 'Washington', 'WA', 100),
+('STATE', 'WV', 'West Virginia', 'WV', 100),
+('STATE', 'WI', 'Wisconsin', 'WI', 100),
+('STATE', 'WY', 'Wyoming', 'WY', 100),
+('STATE', 'DC', 'District of Columbia', 'DC', 100);
 
 -- ==== US TERRITORIES (ISO 3166-2:US) ====
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('STATE', 'PR', 'Puerto Rico', 'PR', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'GU', 'Guam', 'GU', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'VI', 'Virgin Islands', 'VI', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'AS', 'American Samoa', 'AS', '00000000-0000-0000-0000-000000000000'::uuid),
-('STATE', 'MP', 'Northern Mariana Islands', 'MP', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('STATE', 'PR', 'Puerto Rico', 'PR', 100),
+('STATE', 'GU', 'Guam', 'GU', 100),
+('STATE', 'VI', 'Virgin Islands', 'VI', 100),
+('STATE', 'AS', 'American Samoa', 'AS', 100),
+('STATE', 'MP', 'Northern Mariana Islands', 'MP', 100);
 
 -- ==== NORTH AMERICAN COUNTRIES (ISO 3166-1 alpha-2) ====
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('COUNTR', 'US', 'United States', 'US', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'CA', 'Canada', 'CA', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'MX', 'Mexico', 'MX', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'GT', 'Guatemala', 'GT', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'BN', 'Belize', 'BN', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'SV', 'El Salvador', 'SV', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'HN', 'Honduras', 'HN', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'NI', 'Nicaragua', 'NI', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'CR', 'Costa Rica', 'CR', '00000000-0000-0000-0000-000000000000'::uuid),
-('COUNTR', 'PA', 'Panama', 'PA', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('COUNTR', 'US', 'United States', 'US', 100),
+('COUNTR', 'CA', 'Canada', 'CA', 100),
+('COUNTR', 'MX', 'Mexico', 'MX', 100),
+('COUNTR', 'GT', 'Guatemala', 'GT', 100),
+('COUNTR', 'BN', 'Belize', 'BN', 100),
+('COUNTR', 'SV', 'El Salvador', 'SV', 100),
+('COUNTR', 'HN', 'Honduras', 'HN', 100),
+('COUNTR', 'NI', 'Nicaragua', 'NI', 100),
+('COUNTR', 'CR', 'Costa Rica', 'CR', 100),
+('COUNTR', 'PA', 'Panama', 'PA', 100);
 
 -- User Roles
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('ROLE', 'ADMIN', 'System Administrator', 'Admin', '00000000-0000-0000-0000-000000000000'::uuid),
-('ROLE', 'OWNER', 'Accout Owner', 'Owner', '00000000-0000-0000-0000-000000000000'::uuid),
-('ROLE', 'INVESTIGAT', 'Investigator', 'Inv', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('ROLE', 'ADMIN', 'System Administrator', 'Admin', 100),
+('ROLE', 'OWNER', 'Account Owner', 'Owner', 100),
+('ROLE', 'INVESTIGAT', 'Investigator', 'Inv', 100);
 
 -- Case Types
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('CASTYP', 'BCK', 'Background', 'Bg Check', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'CVL', 'Civil', 'Civil', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'COLL', 'Collection', 'Collection', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'CRI', 'Criminal', 'Criminal', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'CUST', 'Custody', 'Custody', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'DTH', 'Death', 'Death', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'DIV', 'Divorce', 'Divorce', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'DOM', 'Domestic', 'Domestic', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'EMP', 'Employer', 'Employer', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'FRA', 'Fraud', 'Fraud', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'HCD', 'Homicide', 'Homicide', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'IND', 'Industrial', 'Industrial', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'FID', 'Infidelity', 'Infidelity', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'INS', 'Insurance', 'Insurance', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'LCAT', 'Locate', 'Locate', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'MSPR', 'Missing Person', 'Missing Person', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'OIS', 'Officer Involved Shooting', 'Offr Inv Shooting', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'POL', 'Political', 'Political', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'PRO', 'Process Service', 'Process Service', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'SEC', 'Protection', 'Protection', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'STLK', 'Stalking', 'Stalking', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'SWP', 'Sweep', 'Sweep', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'TRA', 'Traffic Crash', 'Traffic Crash', '00000000-0000-0000-0000-000000000000'::uuid),
-('CASTYP', 'UOF', 'Use Of Force', 'Use Of Force', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('CASTYP', 'BCK', 'Background', 'Bg Check', 100),
+('CASTYP', 'CVL', 'Civil', 'Civil', 100),
+('CASTYP', 'COLL', 'Collection', 'Collection', 100),
+('CASTYP', 'CRI', 'Criminal', 'Criminal', 100),
+('CASTYP', 'CUST', 'Custody', 'Custody', 100),
+('CASTYP', 'DTH', 'Death', 'Death', 100),
+('CASTYP', 'DIV', 'Divorce', 'Divorce', 100),
+('CASTYP', 'DOM', 'Domestic', 'Domestic', 100),
+('CASTYP', 'EMP', 'Employer', 'Employer', 100),
+('CASTYP', 'FRA', 'Fraud', 'Fraud', 100),
+('CASTYP', 'HCD', 'Homicide', 'Homicide', 100),
+('CASTYP', 'IND', 'Industrial', 'Industrial', 100),
+('CASTYP', 'FID', 'Infidelity', 'Infidelity', 100),
+('CASTYP', 'INS', 'Insurance', 'Insurance', 100),
+('CASTYP', 'LCAT', 'Locate', 'Locate', 100),
+('CASTYP', 'MSPR', 'Missing Person', 'Missing Person', 100),
+('CASTYP', 'OIS', 'Officer Involved Shooting', 'Offr Inv Shooting', 100),
+('CASTYP', 'POL', 'Political', 'Political', 100),
+('CASTYP', 'PRO', 'Process Service', 'Process Service', 100),
+('CASTYP', 'SEC', 'Protection', 'Protection', 100),
+('CASTYP', 'STLK', 'Stalking', 'Stalking', 100),
+('CASTYP', 'SWP', 'Sweep', 'Sweep', 100),
+('CASTYP', 'TRA', 'Traffic Crash', 'Traffic Crash', 100),
+('CASTYP', 'UOF', 'Use Of Force', 'Use Of Force', 100);
 
 -- Marital Status
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('MARITL', 'SINGLE', 'Never Married', 'Single', '00000000-0000-0000-0000-000000000000'::uuid),
-('MARITL', 'MARRIED', 'Currently Married', 'Married', '00000000-0000-0000-0000-000000000000'::uuid),
-('MARITL', 'DIVORCED', 'Divorced', 'Divorced', '00000000-0000-0000-0000-000000000000'::uuid),
-('MARITL', 'WIDOWED', 'Widowed', 'Widowed', '00000000-0000-0000-0000-000000000000'::uuid),
-('MARITL', 'SEPARATED', 'Legally Separated', 'Separated', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('MARITL', 'SINGLE', 'Never Married', 'Single', 100),
+('MARITL', 'MARRIED', 'Currently Married', 'Married', 100),
+('MARITL', 'DIVORCED', 'Divorced', 'Divorced', 100),
+('MARITL', 'WIDOWED', 'Widowed', 'Widowed', 100),
+('MARITL', 'SEPARATED', 'Legally Separated', 'Separated', 100);
 
 -- Gender
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('GENDER', 'M', 'Male', 'M', '00000000-0000-0000-0000-000000000000'::uuid),
-('GENDER', 'F', 'Female', 'F', '00000000-0000-0000-0000-000000000000'::uuid),
-('GENDER', 'O', 'Other/Non-binary', 'Other', '00000000-0000-0000-0000-000000000000'::uuid),
-('GENDER', 'U', 'Undisclosed', 'Unknown', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('GENDER', 'M', 'Male', 'M', 100),
+('GENDER', 'F', 'Female', 'F', 100),
+('GENDER', 'O', 'Other/Non-binary', 'Other', 100),
+('GENDER', 'U', 'Undisclosed', 'Unknown', 100);
 
 -- Contact Methods
-INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_id) VALUES
-('CONTAC', 'EMAIL', 'Email', 'Email', '00000000-0000-0000-0000-000000000000'::uuid),
-('CONTAC', 'MOBILE', 'Mobile Phone', 'Mobile', '00000000-0000-0000-0000-000000000000'::uuid),
-('CONTAC', 'WORK', 'Work Phone', 'Work', '00000000-0000-0000-0000-000000000000'::uuid),
-('CONTAC', 'HOME', 'Home Phone', 'Home', '00000000-0000-0000-0000-000000000000'::uuid);
+INSERT INTO codes (code_type, code, code_description, code_short_description, inserted_by_user_key) VALUES
+('CONTAC', 'EMAIL', 'Email', 'Email', 100),
+('CONTAC', 'MOBILE', 'Mobile Phone', 'Mobile', 100),
+('CONTAC', 'WORK', 'Work Phone', 'Work', 100),
+('CONTAC', 'HOME', 'Home Phone', 'Home', 100);
 
--- NOTE: After creating admin user, update inserted_by_user_id fields:
--- UPDATE codes SET inserted_by_user_id = [admin_user_uuid] WHERE inserted_by_user_id = '00000000-0000-0000-0000-000000000000'::uuid;
+-- NOTE: Admin user will be created with user_key = 100 in 002_admin_user.sql

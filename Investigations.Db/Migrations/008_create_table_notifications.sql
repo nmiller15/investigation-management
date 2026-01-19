@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS notifications (
-    notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    notification_key INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 100),
     subject VARCHAR(100) NOT NULL,
     description TEXT,
-    assigned_to_user_id UUID,
+    assigned_to_user_key INT,
     is_delayed BOOLEAN NOT NULL DEFAULT FALSE,
     delayed_until_datetime TIMESTAMPTZ,
     inserted_datetime TIMESTAMPTZ NOT NULL DEFAULT now(),
-    inserted_by_user_id UUID,
+    inserted_by_user_key INT,
     updated_datetime TIMESTAMPTZ,
-    updated_by_user_id UUID
+    updated_by_user_key INT
 );

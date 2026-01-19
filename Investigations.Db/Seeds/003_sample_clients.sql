@@ -5,50 +5,37 @@
 -- Acme Corporation - Corporate Client
 INSERT INTO clients (
     client_name,
-    contact_person,
-    contact_email,
-    contact_phone,
-    address_id,
-    inserted_by_user_id
+    primary_contact_key,
+    inserted_by_user_key
 ) VALUES (
     'Acme Corporation',
-    'John Smith',
-    'jsmith@acmecorp.com',
-    '(555) 123-4567',
-    NULL, -- Will be updated in 004_sample_addresses.sql
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    NULL, -- Will be updated after contacts are created in 005_sample_contacts.sql
+    100
 );
 
 -- Metro Insurance Group - Insurance Client  
 INSERT INTO clients (
     client_name,
-    contact_person,
-    contact_email,
-    contact_phone,
-    address_id,
-    inserted_by_user_id
+    primary_contact_key,
+    inserted_by_user_key
 ) VALUES (
     'Metro Insurance Group',
-    'Sarah Johnson',
-    'sjohnson@metroinsurance.com',
-    '(555) 987-6543',
-    NULL, -- Will be updated in 004_sample_addresses.sql
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    NULL, -- Will be updated after contacts are created in 005_sample_contacts.sql
+    100
 );
 
 -- Jane Doe Law Firm - Individual Professional Client
 INSERT INTO clients (
     client_name,
-    contact_person,
-    contact_email,
-    contact_phone,
-    address_id,
-    inserted_by_user_id
+    primary_contact_key,
+    inserted_by_user_key
 ) VALUES (
     'Jane Doe Law Firm',
-    'Jane Doe',
-    'jane@janedoelaw.com',
-    '(555) 246-8135',
-    NULL, -- Will be updated in 004_sample_addresses.sql
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    NULL, -- Will be updated after contacts are created in 005_sample_contacts.sql
+    100
 );
+
+-- NOTE: After creating contacts in 005_sample_contacts.sql, update primary_contact_key:
+-- UPDATE clients SET primary_contact_key = (SELECT contact_key FROM contacts WHERE email = 'jsmith@acmecorp.com') WHERE client_name = 'Acme Corporation';
+-- UPDATE clients SET primary_contact_key = (SELECT contact_key FROM contacts WHERE email = 'sjohnson@metroinsurance.com') WHERE client_name = 'Metro Insurance Group';
+-- UPDATE clients SET primary_contact_key = (SELECT contact_key FROM contacts WHERE email = 'jane@janedoelaw.com') WHERE client_name = 'Jane Doe Law Firm';

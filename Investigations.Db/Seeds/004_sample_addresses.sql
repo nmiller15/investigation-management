@@ -10,15 +10,15 @@ INSERT INTO addresses (
     state_code_key,
     country_code_key,
     zip,
-    inserted_by_user_id
+    inserted_by_user_key
 ) VALUES (
     '1234 Broadway Avenue',
     'Suite 1500',
     'New York',
     (SELECT code_key FROM codes WHERE code_type = 'STATE' AND code = 'NY'),
-    (SELECT code_key FROM codes WHERE code_type = 'COUNTRY' AND code = 'US'),
+    (SELECT code_key FROM codes WHERE code_type = 'COUNTR' AND code = 'US'),
     '10001',
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    100
 );
 
 -- Metro Insurance Group Headquarters - Illinois
@@ -29,15 +29,15 @@ INSERT INTO addresses (
     state_code_key,
     country_code_key,
     zip,
-    inserted_by_user_id
+    inserted_by_user_key
 ) VALUES (
     '500 N Michigan Avenue',
     'Floor 25',
     'Chicago',
     (SELECT code_key FROM codes WHERE code_type = 'STATE' AND code = 'IL'),
-    (SELECT code_key FROM codes WHERE code_type = 'COUNTRY' AND code = 'US'),
+    (SELECT code_key FROM codes WHERE code_type = 'COUNTR' AND code = 'US'),
     '60611',
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    100
 );
 
 -- Jane Doe Law Firm - California
@@ -48,29 +48,50 @@ INSERT INTO addresses (
     state_code_key,
     country_code_key,
     zip,
-    inserted_by_user_id
+    inserted_by_user_key
 ) VALUES (
     '789 Market Street',
     'Suite 200',
     'San Francisco',
     (SELECT code_key FROM codes WHERE code_type = 'STATE' AND code = 'CA'),
-    (SELECT code_key FROM codes WHERE code_type = 'COUNTRY' AND code = 'US'),
+    (SELECT code_key FROM codes WHERE code_type = 'COUNTR' AND code = 'US'),
     '94103',
-    (SELECT user_id FROM users WHERE email = 'admin@oliverinvestigations.com')
+    100
 );
 
--- Update clients with their address IDs
-UPDATE clients SET address_id = (
-    SELECT address_id FROM addresses 
-    WHERE line_one = '1234 Broadway Avenue' AND line_two = 'Suite 1500'
-) WHERE client_name = 'Acme Corporation';
+-- Link clients to their addresses using clients_addresses_links table
+INSERT INTO clients_addresses_links (
+    client_key,
+    address_key,
+    is_primary_address
+) 
+SELECT 
+    (SELECT client_key FROM clients WHERE client_name = 'Acme Corporation'),
+    address_key,
+    TRUE
+FROM addresses 
+WHERE line_one = '1234 Broadway Avenue' AND line_two = 'Suite 1500';
 
-UPDATE clients SET address_id = (
-    SELECT address_id FROM addresses 
-    WHERE line_one = '500 N Michigan Avenue' AND line_two = 'Floor 25'
-) WHERE client_name = 'Metro Insurance Group';
+INSERT INTO clients_addresses_links (
+    client_key,
+    address_key,
+    is_primary_address
+) 
+SELECT 
+    (SELECT client_key FROM clients WHERE client_name = 'Metro Insurance Group'),
+    address_key,
+    TRUE
+FROM addresses 
+WHERE line_one = '500 N Michigan Avenue' AND line_two = 'Floor 25';
 
-UPDATE clients SET address_id = (
-    SELECT address_id FROM addresses 
-    WHERE line_one = '789 Market Street' AND line_two = 'Suite 200'
-) WHERE client_name = 'Jane Doe Law Firm';
+INSERT INTO clients_addresses_links (
+    client_key,
+    address_key,
+    is_primary_address
+) 
+SELECT 
+    (SELECT client_key FROM clients WHERE client_name = 'Jane Doe Law Firm'),
+    address_key,
+    TRUE
+FROM addresses 
+WHERE line_one = '789 Market Street' AND line_two = 'Suite 200';
