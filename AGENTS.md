@@ -1,31 +1,37 @@
 # Investigation Management - Agent Guidelines
 
-This repository contains a full-stack .NET application with PostgreSQL database for an investigations management system. The solution includes a Razor Pages web UI, minimal API backend, and shared models layer, all built on a comprehensive PostgreSQL database schema.
+This repository contains a full-stack .NET application with PostgreSQL database for an investigations management system. The solution includes a Razor Pages web UI, service layer, shared models layer, and database migration runner, all built on a comprehensive PostgreSQL database schema with raw SQL access.
 
 ## .NET Project Structure
 
 ### Architecture Overview
-The solution follows a layered architecture with three main projects:
+The solution follows a layered architecture with four main projects:
 
-1. **Investigations.Models** - Class library containing domain models, DTOs, and service interfaces
-2. **Investigations.App** - Minimal API project with business logic and service implementations
+1. **Investigations.Models** - Class library containing domain models, DTOs, service interfaces, and data access interfaces
+2. **Investigations.App** - Service layer with business logic and data access implementations
 3. **Investigations.Web** - Razor Pages web UI that consumes shared services from App project
+4. **Investigations.Db** - Console application for running database migrations and setup
 
 ### Dependency Flow
 ```
 Investigations.Web → Investigations.App → Investigations.Models
+                ↘ Investigations.Db → (database)
 ```
 
-- **Web project** depends on App and Models (can consume services directly or call API endpoints)
-- **App project** depends on Models (contains service layer and API endpoints)
-- **Models project** has no dependencies (pure domain models and interfaces)
+- **Web project** depends on App and Models (consumes services directly)
+- **App project** depends on Models (contains service layer and data repositories)
+- **Models project** has minimal dependencies (Npgsql for data interfaces)
+- **Db project** is standalone (runs migrations against database)
 
 ### Project Organization
 - **Models/**: Domain entities, DTOs, request/response models, service interfaces
 - **App/Services/**: Business logic and service implementations
-- **App/Controllers/**: Minimal API endpoints
+- **App/Repositories/**: Data access repositories using raw SQL
 - **Web/Pages/**: Razor Pages UI
 - **Web/Services/**: UI-specific service adapters (if needed)
+- **Db/Migrations/**: Database schema migration files
+- **Db/Seeds/**: Database seed data files
+- **Db/Setup/**: Database setup and configuration scripts
 
 ## Build/Development Commands
 
@@ -55,14 +61,11 @@ psql -U postgres -f db/setup/00_create_db.sql
 psql -U postgres -d core -f db/setup/01_roles.sql
 psql -U postgres -d core -f db/setup/02_permissions.sql
 
-# Run migrations (in order)
-psql -U app_user -d core -f db/migrations/001_create_table_schema_migrations.sql
-psql -U app_user -d core -f db/migrations/002_create_table_users.sql
-# ... continue through all migrations
+# Run migrations using the custom .NET migration runner
+dotnet run --project Investigations.Db
 
-# Alternative: Use a migration tool like sqitch or flyway if configured
-# sqitch deploy
-# flyway migrate
+# Run production migrations
+dotnet run --project Investigations.Db -- --prod
 
 # Seed data execution (run after migrations)
 # IMPORTANT: Complete manual codes in 001_codes.sql before running seeds
@@ -120,42 +123,43 @@ psql -U app_user -d core -f db/seeds/005_sample_contacts.sql
 - **Folder structure** follows namespace hierarchy
 - **Models**: `Investigations.Models/Entities/`, `Investigations.Models/DTOs/`, `Investigations.Models/Interfaces/`
 - **Services**: `Investigations.App/Services/`, `Investigations.App/Repositories/`
-- **Controllers**: `Investigations.App/Controllers/`
 - **Pages**: `Investigations.Web/Pages/` organized by feature
 
 ### Code Patterns
 - **Async/Await**: Use async methods for I/O operations (database, HTTP calls)
 - **Dependency Injection**: Constructor injection for services
-- **Repository Pattern**: Use generic repositories for data access
+- **Repository Pattern**: Use BaseSqlRepository for stored procedure access
 - **DTO Pattern**: Separate domain models from API contracts
 - **Validation**: Use Data Annotations or FluentValidation
+- **Data Access**: Use ISqlDataParser<T> interface for mapping SQL results to objects
 
-### Entity Framework Guidelines
-- **DbContext**: Named `InvestigationDbContext` in App project
-- **Entities**: Map to database tables with proper navigation properties
-- **Migrations**: Use descriptive names and review before applying
-- **Queries**: Use async methods (ToListAsync, FirstOrDefaultAsync, etc.)
-- **Transactions**: Use DbContext transaction for multi-entity operations
+### Database Access Guidelines
+- **Raw SQL**: Use stored procedures with BaseSqlRepository for all data access
+- **Connection Management**: Use Npgsql for PostgreSQL connectivity
+- **Parameter Handling**: Use DataCallSettings for procedure parameters
+- **Result Mapping**: Implement ISqlDataParser<T> for mapping database results
+- **Transactions**: Use Npgsql transactions for multi-operation scenarios
+- **Stored Procedures**: Follow naming convention `sp_{table}_{action}` (e.g., `sp_users_get_by_id`)
 
 ### API Development
-- **Minimal APIs**: Use endpoint definitions in App project
-- **HTTP Methods**: Proper use of GET, POST, PUT, DELETE
-- **Status Codes**: Return appropriate HTTP status codes
-- **Error Handling**: Use problem details for API errors
-- **Documentation**: Include XML comments for OpenAPI generation
+- **Service Layer**: Business logic is implemented in Services layer of App project
+- **Data Access**: All database operations go through Repository pattern with stored procedures
+- **Error Handling**: Use proper exception handling and logging
+- **Future APIs**: When adding APIs, use Minimal APIs in App project
+- **Documentation**: Include XML comments for future OpenAPI generation
 
 ## SQL Code Style Guidelines
 
 ### Naming Conventions
 - **Tables**: snake_case, plural (e.g., `users`, `case_notes`)
-- **Columns**: snake_case, descriptive (e.g., `inserted_datetime`, `updated_by_user_id`)
-- **Primary Keys**: `{table}_id` (e.g., `user_id`, `case_id`)
-- **Foreign Keys**: `{referenced_table}_id` (e.g., `user_id`, `case_id`)
+- **Columns**: snake_case, descriptive (e.g., `inserted_datetime`, `updated_by_user_key`)
+- **Primary Keys**: `{table}_key` (e.g., `user_key`, `case_key`)
+- **Foreign Keys**: `{referenced_table}_key` (e.g., `user_key`, `case_key`)
 - **Constraints**: descriptive names (e.g., `fk_cases_subject_id`)
 - **Views**: prefixed with `v_` (e.g., `v_cases`, `v_subjects`)
 
 ### Data Types
-- **Primary Keys**: `UUID` with `gen_random_uuid()` default
+- **Primary Keys**: `INT` with `GENERATED ALWAYS AS IDENTITY` (starting at 100)
 - **Text fields**: `VARCHAR(n)` with appropriate length limits
 - **Dates/Times**: `DATE` for dates, `TIMESTAMPTZ` for timestamps
 - **Booleans**: `BOOLEAN`
@@ -164,11 +168,11 @@ psql -U app_user -d core -f db/seeds/005_sample_contacts.sql
 ### Column Patterns
 - **Audit Fields**: All tables include:
   - `inserted_datetime TIMESTAMPTZ NOT NULL DEFAULT now()`
-  - `inserted_by_user_id UUID`
+  - `inserted_by_user_key INT`
   - `updated_datetime TIMESTAMPTZ`
-  - `updated_by_user_id UUID`
+  - `updated_by_user_key INT`
 - **Status Fields**: Use appropriate codes from `codes` table
-- **Auto-increment**: Use `DEFAULT INCREMENT` for sequence numbers
+- **Auto-increment**: Use `GENERATED ALWAYS AS IDENTITY` for sequence numbers
 
 ### SQL Formatting
 - Use uppercase for SQL keywords (`CREATE`, `TABLE`, `NOT NULL`)
@@ -197,7 +201,7 @@ psql -U app_user -d core -f db/seeds/005_sample_contacts.sql
 - Password management handled out of band (not in version control)
 
 ### Database Design Principles
-- Use UUIDs for primary keys to avoid sequence conflicts
+- Use identity columns for primary keys starting at 100
 - Implement proper foreign key relationships
 - Create views for complex joins and frequently accessed data
 - Use codes table for lookup values instead of ENUMs
@@ -237,4 +241,4 @@ dotnet test --collect:"XPlat Code Coverage"
 - ASP.NET Identity password hashes must be generated via application code for admin user
 - Use dependency injection for all services and repositories
 - Follow async/await patterns for database operations
-- Entity Framework should be added to replace raw SQL queries in application code
+- Use BaseSqlRepository pattern with stored procedures for data access
