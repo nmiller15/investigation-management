@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Npgsql;
 
 namespace Investigations.Db;
@@ -93,12 +93,12 @@ public static class Program
     }
 }
 
-public class AppSettings()
+public class AppSettings
 {
     public ConnectionStrings ConnectionStrings { get; set; } = new ConnectionStrings();
 }
 
-public class ConnectionStrings()
+public class ConnectionStrings
 {
     public string DefaultConnection { get; set; } = string.Empty;
     public string SystemConnection { get; set; } = string.Empty;
