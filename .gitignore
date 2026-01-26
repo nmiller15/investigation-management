@@ -3,7 +3,8 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-*.connectionStrings.json
+**/*.connectionStrings.json
+**/investigations.*.json
 
 # dotenv files
 .env
