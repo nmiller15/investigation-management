@@ -25,6 +25,12 @@ public static class ConfigurationExtensions
             ? LogEventLevel.Debug
             : LogEventLevel.Information;
 
+        var serilog = config.GetSection("SerilogSettings");
+        foreach (var kvp in serilog.GetChildren())
+        {
+            Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+        }
+
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .Enrich.FromLogContext()
