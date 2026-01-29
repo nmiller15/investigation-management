@@ -22,11 +22,10 @@ public static class ConfigurationExtensions
     {
         var config = builder.Configuration;
         var logLevel = builder.Environment.IsDevelopment()
-            ? LogEventLevel.Debug
+            ? LogEventLevel.Fatal
             : LogEventLevel.Information;
 
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+        var loggerConfiguration = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.File("Logs/investigations.log", rollingInterval: RollingInterval.Day)
@@ -34,8 +33,20 @@ public static class ConfigurationExtensions
                             queueLimitBytes: null,
                             httpClient: new CustomHttpClient(),
                             configuration: config,
-                            restrictedToMinimumLevel: logLevel)
-            .CreateLogger();
+                            restrictedToMinimumLevel: logLevel);
+
+        if (builder.Environment.IsDevelopment())
+        {
+            loggerConfiguration = loggerConfiguration
+                .MinimumLevel.Debug();
+        }
+        else
+        {
+            loggerConfiguration = loggerConfiguration
+                .MinimumLevel.Information();
+        }
+
+        Log.Logger = loggerConfiguration.CreateLogger();
     }
 }
 
