@@ -20,7 +20,7 @@ INSERT INTO users (
     '1997-09-02',
     -- ASP.NET Identity password hash placeholder
     -- Replace this with actual ASP.NET generated hash for "admin" password
-    '\x_asp_net_hash_placeholder',
+    'AQAAAAEAACcQAAAAELAQ6ZLRiFlrxV/yP5DwXmj7jWIdKssf+814fXc5Q+NZ/Zc8jtXln9K51I5qGXbeGA==',
     (SELECT code_key FROM codes WHERE code_type = 'ROLE' AND code = 'ADMIN'),
     100 -- Self-referenced for first admin user
 );

@@ -1,12 +1,12 @@
 namespace Investigations.Models;
 
-public class BaseModelWithAudit
+public class BaseAuditModel
 {
-    public Guid InsertedByUserId { get; set; } = Guid.Empty;
+    public int InsertedByUserKey { get; set; } = -1;
     public string InsertedByFirstName { get; set; } = string.Empty;
     public string InsertedByLastName { get; set; } = string.Empty;
     public DateTime InsertedDateTime { get; set; }
-    public Guid UpdatedByUserId { get; set; } = Guid.Empty;
+    public int UpdatedByUserKey { get; set; } = -1;
     public string UpdatedByFirstName { get; set; } = string.Empty;
     public string UpdatedByLastName { get; set; } = string.Empty;
     public DateTime? UpdatedDateTime { get; set; }

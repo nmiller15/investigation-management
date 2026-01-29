@@ -29,7 +29,7 @@ public static class ConfigurationExtensions
             .MinimumLevel.Debug()
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.File("investigations.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("Logs/investigations.log", rollingInterval: RollingInterval.Day)
             .WriteTo.Http(requestUri: config.GetSection("SerilogSettings")["Endpoint"],
                             queueLimitBytes: null,
                             httpClient: new CustomHttpClient(),
@@ -48,14 +48,14 @@ public class CustomHttpClient : IHttpClient
     public void Configure(IConfiguration configuration)
     {
         var key = configuration.GetSection("SerilogSettings")["ApiKey"];
-        Console.WriteLine($"Configuring CustomHttpClient with API Key. {key.Substring(0, 4)}****");
+        // Console.WriteLine($"Configuring CustomHttpClient with API Key. {key.Substring(0, 4)}****");
         httpClient.DefaultRequestHeaders.Add("X-Api-Key", key);
     }
 
     public async Task<HttpResponseMessage> PostAsync(string requestUri, Stream contentStream, CancellationToken cancellationToken)
     {
         using var content = new StreamContent(contentStream);
-        Console.WriteLine(await content.ReadAsStringAsync());
+        // Console.WriteLine(await content.ReadAsStringAsync());
 
         content.Headers.Add("Content-Type", "application/json");
 

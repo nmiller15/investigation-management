@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Contact : BaseModelWithAudit
+public class Contact : BaseAuditModel
 {
     public Guid ContactId { get; set; } = Guid.Empty;
     public string FirstName { get; set; } = string.Empty;

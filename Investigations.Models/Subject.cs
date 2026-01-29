@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Subject : BaseModelWithAudit
+public class Subject : BaseAuditModel
 {
     public Guid SubjectId { get; set; } = Guid.Empty;
     public string FirstName { get; set; } = string.Empty;

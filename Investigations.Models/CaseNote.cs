@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class CaseNote : BaseModelWithAudit
+public class CaseNote : BaseAuditModel
 {
     public Guid CaseNoteId { get; set; } = Guid.Empty;
     public string Body { get; set; } = string.Empty;

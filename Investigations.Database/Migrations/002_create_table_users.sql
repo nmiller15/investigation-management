@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
-    birthdate DATE NOT NULL,
+    birthdate DATE,
     password_hash BYTEA NOT NULL,
     role_code_key INT NOT NULL,
     inserted_datetime TIMESTAMPTZ NOT NULL DEFAULT now(),

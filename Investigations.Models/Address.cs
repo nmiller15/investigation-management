@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Address : BaseModelWithAudit
+public class Address : BaseAuditModel
 {
     public Guid AddressId { get; set; } = Guid.Empty;
     public string LineOne { get; set; } = string.Empty;

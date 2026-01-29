@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Task : BaseModelWithAudit
+public class _Task : BaseAuditModel
 {
     public Guid TaskId { get; set; } = Guid.Empty;
     public string TaskName { get; set; } = string.Empty;

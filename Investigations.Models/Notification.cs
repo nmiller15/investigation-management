@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Notification : BaseModelWithAudit
+public class Notification : BaseAuditModel
 {
     public Guid NotificationId { get; set; } = Guid.Empty;
     public string Subject { get; set; } = string.Empty;

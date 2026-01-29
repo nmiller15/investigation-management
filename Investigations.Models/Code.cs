@@ -1,6 +1,6 @@
 namespace Investigations.Models;
 
-public class Code : BaseModelWithAudit
+public class Code : BaseAuditModel
 {
     public int CodeKey { get; set; } = 0;
     public string CodeValue { get; set; } = string.Empty;
