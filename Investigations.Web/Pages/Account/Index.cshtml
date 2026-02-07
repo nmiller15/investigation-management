@@ -1,0 +1,82 @@
+@page
+@model AccountIndexModel
+@using Investigations.Models.Users
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Accounts";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2>Accounts</h2>
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["Error"]
+                </div>
+            }
+            
+            @if (Model.Users.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>
+                                    <a asp-page="/Account/Index" 
+                                       asp-route-sortColumn="LastName" 
+                                       asp-route-sortDirection="@(Model.SortColumn == "LastName" && Model.SortDirection == "ASC" ? "DESC" : "ASC")"
+                                       class="text-decoration-none">
+                                        Name @(Model.SortColumn == "LastName" ? (Model.SortDirection == "ASC" ? "↑" : "↓") : "↕")
+                                    </a>
+                                </th>
+                                <th>
+                                    <a asp-page="/Account/Index" 
+                                       asp-route-sortColumn="Email" 
+                                       asp-route-sortDirection="@(Model.SortColumn == "Email" && Model.SortDirection == "ASC" ? "DESC" : "ASC")"
+                                       class="text-decoration-none">
+                                        Email @(Model.SortColumn == "Email" ? (Model.SortDirection == "ASC" ? "↑" : "↓") : "↕")
+                                    </a>
+                                </th>
+                                <th>
+                                    <a asp-page="/Account/Index" 
+                                       asp-route-sortColumn="Role" 
+                                       asp-route-sortDirection="@(Model.SortColumn == "Role" && Model.SortDirection == "ASC" ? "DESC" : "ASC")"
+                                       class="text-decoration-none">
+                                        Role @(Model.SortColumn == "Role" ? (Model.SortDirection == "ASC" ? "↑" : "↓") : "↕")
+                                    </a>
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>@user.FirstName @user.LastName</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.Role.ToDisplayString()</td>
+                                    <td>
+                                        <a asp-page="/Account/UserIndex" 
+                                           asp-route-userKey="@user.UserKey" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            View Profile
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info" role="alert">
+                    No accounts found.
+                </div>
+            }
+        </div>
+    </div>
+</div>

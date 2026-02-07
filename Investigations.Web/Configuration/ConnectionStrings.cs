@@ -1,6 +1,6 @@
-using Investigations.Models.Interfaces;
+using Investigations.Models.Configuration;
 
-namespace Investigations.Web;
+namespace Investigations.Web.Configuration;
 
 public class ConnectionStrings : IConnectionStrings
 {

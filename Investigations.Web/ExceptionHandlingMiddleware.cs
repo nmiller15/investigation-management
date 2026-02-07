@@ -19,7 +19,7 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            Log.Error(ex.Message);
+            Log.Error(ex, "An unhandled exception occurred while processing the request.");
             Console.Error.WriteLine($"Exception caught: {ex.Message}");
             await _next(context);
         }

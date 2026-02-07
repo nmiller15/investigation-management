@@ -1,5 +1,7 @@
+using System.Data;
 using Investigations.Models.Data;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Investigations.Infrastructure.Data.Extensions;
 
@@ -13,7 +15,17 @@ public static class DbParamExtensions
         };
 
         if (p.Type.HasValue)
-            param.DbType = p.Type.Value;
+        {
+            if (p.Type.Value == DbType.DateTime)
+            {
+                param.DataTypeName = null;
+                param.NpgsqlDbType = NpgsqlDbType.Timestamp; // force timestamp
+            }
+            else
+            {
+                param.DbType = p.Type.Value;
+            }
+        }
 
         return param;
     }

@@ -1,4 +1,4 @@
-namespace Investigations.Models.Interfaces;
+namespace Investigations.Models.Configuration;
 
 public interface IConnectionStrings
 {

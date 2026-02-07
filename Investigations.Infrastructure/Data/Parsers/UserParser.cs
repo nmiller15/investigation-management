@@ -1,6 +1,6 @@
 using System.Data;
 using Investigations.Infrastructure.Data.Extensions;
-using Investigations.Models;
+using Investigations.Models.Users;
 
 namespace Investigations.Infrastructure.Data.Parsers;
 
@@ -17,10 +17,8 @@ public class UserParser : BaseAuditModelParser<User>
         Model.LastName = reader.ParseString("last_name");
         Model.Email = reader.ParseString("email");
         Model.Birthdate = reader.ParseDateTime("birthdate");
-        Model.RoleCodeKey = reader.ParseInt32("role_code_key");
-        Model.RoleDescription = reader.ParseString("role_description");
+        Model.Role = (User.Roles)reader.ParseInt32("role_code_key");
 
         return Model;
     }
-
 }

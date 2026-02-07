@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investigations.Web", "Inves
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investigations.Models", "Investigations.Models\Investigations.Models.csproj", "{94008A32-0638-4DF9-BF29-213874B31C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investigations.Db", "Investigations.Db\Investigations.Db.csproj", "{1E18781D-A9A7-4C95-AEFD-BC2916553BB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investigations.Database", "Investigations.Database\Investigations.Database.csproj", "{1E18781D-A9A7-4C95-AEFD-BC2916553BB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Investigations.Infrastructure", "Investigations.Infrastructure\Investigations.Infrastructure.csproj", "{7EE49656-E000-4004-93E3-875C4CED3117}"
 EndProject

@@ -1,7 +1,7 @@
 using System.Data;
 using Investigations.Infrastructure.Data.Extensions;
-using Investigations.Models;
 using Investigations.Models.Data;
+using Investigations.Models.Shared;
 
 namespace Investigations.Infrastructure.Data.Parsers;
 

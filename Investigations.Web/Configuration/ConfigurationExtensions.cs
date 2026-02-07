@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Http;
@@ -21,6 +22,13 @@ public static class ConfigurationExtensions
     public static void ConfigureLogging(this WebApplicationBuilder builder)
     {
         var config = builder.Configuration;
+        var serilogSettings = config.GetSection("SerilogSettings");
+        var endpoint = serilogSettings["Endpoint"];
+        if (string.IsNullOrEmpty(endpoint))
+        {
+            throw new Exception("Need endpoint for Serilog HTTP sink");
+        }
+
         var logLevel = builder.Environment.IsDevelopment()
             ? LogEventLevel.Fatal
             : LogEventLevel.Information;
@@ -29,7 +37,7 @@ public static class ConfigurationExtensions
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.File("Logs/investigations.log", rollingInterval: RollingInterval.Day)
-            .WriteTo.Http(requestUri: config.GetSection("SerilogSettings")["Endpoint"],
+            .WriteTo.Http(requestUri: config.GetSection("SerilogSettings")["Endpoint"]!,
                             queueLimitBytes: null,
                             httpClient: new CustomHttpClient(),
                             configuration: config,

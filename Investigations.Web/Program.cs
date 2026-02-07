@@ -1,6 +1,7 @@
 using Investigations.Web;
 using Investigations.Web.Configuration;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.LoadConfigurationFiles();
 builder.ConfigureLogging();
 
 builder.Services.AddUtilities(builder.Configuration);
+builder.Services.AddCookieAuthentication(builder.Environment.IsDevelopment());
+builder.Services.AddUserContext();
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
@@ -30,12 +33,20 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+Log.Information("Configuring authentication middleware...");
+Log.Information("Default authentication scheme: {Scheme}", CookieAuthenticationDefaults.AuthenticationScheme);
+app.UseAuthentication();
+Log.Information("Authentication middleware configured");
 app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+Log.Information("Starting web application...");
+
 app.Run();
+
+Log.Information("Closing sesison...");
 
 Log.CloseAndFlush();

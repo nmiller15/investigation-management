@@ -25,3 +25,5 @@ AS $$
     WHERE vu.user_key = p_user_key
     LIMIT 1;
 $$;
+
+GRANT EXECUTE ON FUNCTION get_users() TO app_user;

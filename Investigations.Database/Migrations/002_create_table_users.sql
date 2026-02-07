@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(30) NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
     birthdate DATE,
-    password_hash BYTEA NOT NULL,
+    password_hash VARCHAR(256) NOT NULL,
     role_code_key INT NOT NULL,
     inserted_datetime TIMESTAMPTZ NOT NULL DEFAULT now(),
     inserted_by_user_key INT,

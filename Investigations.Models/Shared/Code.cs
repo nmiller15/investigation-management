@@ -1,4 +1,4 @@
-namespace Investigations.Models;
+namespace Investigations.Models.Shared;
 
 public class Code : BaseAuditModel
 {

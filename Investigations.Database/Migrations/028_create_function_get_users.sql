@@ -21,3 +21,5 @@ AS $$
         vu.updated_datetime
     FROM v_users AS vu;
 $$;
+
+GRANT EXECUTE ON FUNCTION get_users() TO app_user;

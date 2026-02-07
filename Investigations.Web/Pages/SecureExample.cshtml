@@ -1,0 +1,85 @@
+@page
+@model SecureExampleModel
+@{
+ViewData["Title"] = "Secure Example";
+Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <h2>@ViewData["Title"]</h2>
+        <hr />
+
+        <div class="alert alert-info">
+            <h5>Current User Information</h5>
+            <p>@Model.CurrentUserInfo</p>
+        </div>
+
+        <h3>Access Control Examples</h3>
+
+        @if (Model.Messages.Any())
+        {
+        <div class="mb-4">
+            @foreach (var message in Model.Messages)
+            {
+            <div class="alert alert-secondary">@message</div>
+            }
+        </div>
+        }
+
+        @if (Model.CanViewAdminPanel)
+        {
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+                <h5>Admin Panel (System Administrators Only)</h5>
+            </div>
+            <div class="card-body">
+                <p>Admin functionality is available to you.</p>
+
+                @if (Model.Users.Any())
+                {
+                <h6>All Users:</h6>
+                <ul>
+                    @foreach (var user in Model.Users)
+                    {
+                    <li>@user.Email (@user.Role)</li>
+                    }
+                </ul>
+                }
+
+                <form method="post" asp-page-handler="AdminAction">
+                    <button type="submit" class="btn btn-danger">Perform Admin Action</button>
+                </form>
+            </div>
+        </div>
+        }
+
+        @if (Model.CanViewCases)
+        {
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                <h5>Investigation Access (Investigators, AccountOwners, SystemAdministrators)</h5>
+            </div>
+            <div class="card-body">
+                <p>Investigation functionality is available to you.</p>
+
+                <form method="post" asp-page-handler="CaseAction">
+                    <button type="submit" class="btn btn-primary">Perform Case Action</button>
+                </form>
+            </div>
+        </div>
+        }
+
+        @if (!Model.CanViewAdminPanel && !Model.CanViewCases)
+        {
+        <div class="alert alert-warning">
+            <h5>Limited Access</h5>
+            <p>You don't have access to admin or investigation features with your current role.</p>
+        </div>
+        }
+
+        <div class="mt-4">
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,5 @@
 using Investigations.Models.Configuration;
 using Investigations.Models.Data;
-using Investigations.Models.Interfaces;
 
 namespace Investigations.Infrastructure.Data;
 

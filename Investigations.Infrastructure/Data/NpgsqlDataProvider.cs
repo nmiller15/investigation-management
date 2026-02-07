@@ -7,8 +7,34 @@ namespace Investigations.Infrastructure.Data;
 
 public static class NpgsqlDataProvider
 {
+    public async static Task<int> ExecuteFunctionNonQuery(DataCallSettings dcs)
+    {
+        if (!dcs.IsFunctionCall)
+            throw new InvalidOperationException("Called ExecuteFunctionVoid on a non-function DataCallSettings instance.");
+
+        var functionName = dcs.FunctionName;
+        var connectionString = dcs.ConnectionString;
+        var parameters = dcs.Parameters
+            .Select(p => p.ToNpgsql())
+            .ToArray();
+
+        using var conn = new NpgsqlConnection(connectionString);
+
+        var sql = $"SELECT * FROM {functionName}({string.Join(",", parameters.Select(p => "@" + p.ParameterName))})";
+        var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddRange(parameters);
+
+        conn.Open();
+        var rows = await cmd.ExecuteNonQueryAsync();
+
+        return rows;
+    }
+
     public async static Task<T> ExecuteFunctionScalar<T>(DataCallSettings dcs, ISqlDataParser<T> parser)
     {
+        if (!dcs.IsFunctionCall)
+            throw new InvalidOperationException("Called ExecuteFunctionScalar<T> on a non-function DataCallSettings instance.");
+
         var functionName = dcs.FunctionName;
         var connectionString = dcs.ConnectionString;
         var parameters = dcs.Parameters
@@ -28,6 +54,9 @@ public static class NpgsqlDataProvider
 
     public async static Task<List<T>> ExecuteFunction<T>(DataCallSettings dcs, ISqlDataParser<T> parser)
     {
+        if (!dcs.IsFunctionCall)
+            throw new InvalidOperationException("Called ExecuteFunction<T> on a non-function DataCallSettings instance.");
+
         var results = new List<T>();
 
         var functionName = dcs.FunctionName;
@@ -54,6 +83,9 @@ public static class NpgsqlDataProvider
 
     public async static Task ExecuteProcedure(DataCallSettings dcs)
     {
+        if (!dcs.IsProcedureCall)
+            throw new InvalidOperationException("Called ExecuteProcedure on a non-procedure DataCallSettings instance.");
+
         var procedureName = dcs.ProcedureName;
         var connectionString = dcs.ConnectionString;
         var parameters = dcs.Parameters

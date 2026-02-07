@@ -1,3 +1,5 @@
+using Investigations.Models.Shared;
+
 namespace Investigations.Models;
 
 public class _Task : BaseAuditModel

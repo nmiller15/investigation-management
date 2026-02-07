@@ -25,3 +25,5 @@ AS $$
     WHERE vu.email = p_email
     LIMIT 1;
 $$;
+
+GRANT EXECUTE ON FUNCTION get_user_by_email(VARCHAR) TO app_user;
