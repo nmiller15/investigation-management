@@ -27,7 +27,6 @@ public class LoginModel : PageModel
     [BindProperty]
     public bool RememberMe { get; set; }
 
-    public string? ReturnUrl { get; set; }
 
     public LoginModel(IAuthService authService, IUsersService usersService)
     {
@@ -35,21 +34,17 @@ public class LoginModel : PageModel
         _usersService = usersService;
     }
 
-    public void OnGetAsync(string? returnUrl = null)
+    public void OnGetAsync()
     {
-        ReturnUrl = returnUrl;
-
         // If already authenticated, redirect to return URL or home
         if (User.Identity?.IsAuthenticated == true)
         {
-            Response.Redirect(returnUrl ?? "/Index");
+            RedirectToPage("/Index");
         }
     }
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
-        ReturnUrl = returnUrl;
-
         if (!ModelState.IsValid)
             return Page();
 
@@ -88,7 +83,7 @@ public class LoginModel : PageModel
              string.IsNullOrEmpty(userReq.Payload.LastName)))
         {
             TempData["Info"] = "Please complete your profile information.";
-            return RedirectToPage("/Account/Edit", new { userKey = 111 });
+            return RedirectToPage("/Account/Edit", new { userKey = userReq.Payload.UserKey });
         }
 
         return RedirectToPage(returnUrl ?? "/Index");
