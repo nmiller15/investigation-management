@@ -1,14 +1,13 @@
+using Investigations.Models.Auth;
 using Investigations.Models.Users;
-using Investigations.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Investigations.Models.Auth;
 
 namespace Investigations.Web.Pages.Account;
 
-public class UserIndexModel(IUsersService usersService, ICurrentUser currentUser) : PageModel
+public class UserIndexModel(IUserService userService, ICurrentUser currentUser) : PageModel
 {
-    private readonly IUsersService _usersService = usersService;
+    private readonly IUserService _userService = userService;
     private readonly ICurrentUser _currentUser = currentUser;
 
     [BindProperty(SupportsGet = true)]
@@ -22,7 +21,7 @@ public class UserIndexModel(IUsersService usersService, ICurrentUser currentUser
         if (!_currentUser.IsAuthenticated)
             return RedirectToPage("/Account/Login");
 
-        var userResult = await _usersService.GetUser(UserKey);
+        var userResult = await _userService.GetUser(UserKey);
         if (!userResult.WasSuccessful)
         {
             TempData["Error"] = userResult.Message ?? "User not found.";

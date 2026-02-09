@@ -7,7 +7,7 @@ namespace Investigations.Web.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly IUsersService _usersService;
+    private readonly IUserService _userService;
     private readonly IPasswordHasher _hasher;
 
     public List<string> ErrorMessages { get; set; } = new();
@@ -17,28 +17,28 @@ public class IndexModel : PageModel
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
 
-    public IndexModel(IUsersService usersService, IPasswordHasher hasher)
+    public IndexModel(IUserService userService, IPasswordHasher hasher)
     {
-        _usersService = usersService;
+        _userService = userService;
         _hasher = hasher;
     }
 
     public async Task OnGetAsync()
     {
         Log.Information("Handling Index page GET request.");
-        var usersResponse = await _usersService.GetUsers();
+        var usersResponse = await _userService.GetUsers();
         if (!usersResponse.WasSuccessful)
             ErrorMessages.Add(usersResponse.Message ?? "An error occurred while retrieving users.");
         else
             UserEmails = usersResponse.Payload.Select(u => u.Email).ToList();
 
-        var userByKeyResponse = await _usersService.GetUser(100);
+        var userByKeyResponse = await _userService.GetUser(100);
         if (!userByKeyResponse.WasSuccessful)
             ErrorMessages.Add(userByKeyResponse.Message ?? "An error occurred while retrieving user by key.");
         else
             KeyUser = userByKeyResponse.Payload;
 
-        var userByEmailResponse = await _usersService.GetUserByEmail("admin@nolanmiller.me");
+        var userByEmailResponse = await _userService.GetUserByEmail("admin@nolanmiller.me");
         if (!userByEmailResponse.WasSuccessful)
             ErrorMessages.Add(userByEmailResponse.Message ?? "An error occurred while retrieving user by email.");
         else

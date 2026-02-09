@@ -1,19 +1,18 @@
-using System.Security.Claims;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Investigations.Models.Auth;
+using Investigations.Models.Users;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Serilog;
-using Investigations.Models.Users;
 
 namespace Investigations.Web.Pages.Account;
 
 public class LoginModel : PageModel
 {
     private readonly IAuthService _authService;
-    private readonly IUsersService _usersService;
+    private readonly IUserService _userService;
 
     [Required]
     [EmailAddress]
@@ -28,10 +27,10 @@ public class LoginModel : PageModel
     public bool RememberMe { get; set; }
 
 
-    public LoginModel(IAuthService authService, IUsersService usersService)
+    public LoginModel(IAuthService authService, IUserService userService)
     {
         _authService = authService;
-        _usersService = usersService;
+        _userService = userService;
     }
 
     public void OnGetAsync()
@@ -77,7 +76,7 @@ public class LoginModel : PageModel
             claimsPrincipal,
             authProperties);
 
-        var userReq = await _usersService.GetUser(result.Payload.UserKey);
+        var userReq = await _userService.GetUser(result.Payload.UserKey);
         if (userReq.WasSuccessful &&
             (string.IsNullOrEmpty(userReq.Payload.FirstName) ||
              string.IsNullOrEmpty(userReq.Payload.LastName)))

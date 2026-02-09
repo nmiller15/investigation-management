@@ -21,4 +21,10 @@ public static class DataReaderExtensions
         int ordinal = reader.GetOrdinal(columnName);
         return reader.IsDBNull(ordinal) ? DateTime.MinValue : reader.GetDateTime(ordinal);
     }
+
+    public static bool ParseBool(this IDataReader reader, string columnName)
+    {
+        int ordinal = reader.GetOrdinal(columnName);
+        return !reader.IsDBNull(ordinal) && reader.GetBoolean(ordinal);
+    }
 }

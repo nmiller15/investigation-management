@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Investigations.Web.Pages.Account;
 
-public class AccountIndexModel(IUsersService usersService, ICurrentUser currentUser) : PageModel
+public class AccountIndexModel(IUserService userService, ICurrentUser currentUser) : PageModel
 {
     private readonly ICurrentUser _currentUser = currentUser;
-    private readonly IUsersService _usersService = usersService;
+    private readonly IUserService _userService = userService;
 
     public bool IsAuthenticated => _currentUser.IsAuthenticated;
     public bool CanViewAccountList => _currentUser.IsAccountOwner() ||
@@ -27,7 +27,7 @@ public class AccountIndexModel(IUsersService usersService, ICurrentUser currentU
         if (!CanViewAccountList)
             return RedirectToPage("/Account/{userKey}/", new { userKey = _currentUser.UserKey });
 
-        var usersResult = await _usersService.GetUsers();
+        var usersResult = await _userService.GetUsers();
         if (!usersResult.WasSuccessful)
         {
             TempData["Error"] = "Unable to load accounts. Please try again later.";

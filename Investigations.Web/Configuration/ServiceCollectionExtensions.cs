@@ -1,7 +1,9 @@
 using Investigations.App.Auth;
+using Investigations.App.Cases;
 using Investigations.App.Users;
 using Investigations.Infrastructure.Auth;
 using Investigations.Models.Auth;
+using Investigations.Models.Cases;
 using Investigations.Models.Configuration;
 using Investigations.Models.Users;
 using Investigations.Web.Configuration;
@@ -39,13 +41,14 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICaseRepository, CaseRepository>();
         return services;
     }
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUsersService, UsersService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         return services;
     }

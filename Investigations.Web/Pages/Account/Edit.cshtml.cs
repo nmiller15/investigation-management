@@ -8,9 +8,9 @@ using Serilog;
 
 namespace Investigations.Web.Pages.Account;
 
-public class EditModel(IUsersService usersService, IAuthService authService, ICurrentUser currentUser) : PageModel, IValidatableObject
+public class EditModel(IUserService userService, IAuthService authService, ICurrentUser currentUser) : PageModel, IValidatableObject
 {
-    private readonly IUsersService _usersService = usersService;
+    private readonly IUserService _userService = userService;
     private readonly IAuthService _authService = authService;
     private readonly ICurrentUser _currentUser = currentUser;
 
@@ -61,7 +61,7 @@ public class EditModel(IUsersService usersService, IAuthService authService, ICu
             return RedirectToPage("/Account/Index");
         }
 
-        var user = await _usersService.GetUser(UserKey);
+        var user = await _userService.GetUser(UserKey);
         if (!user.WasSuccessful)
         {
             TempData["Error"] = user.Message ?? "An error occurred while fetching user data.";
@@ -95,7 +95,7 @@ public class EditModel(IUsersService usersService, IAuthService authService, ICu
             return Page();
         }
 
-        var user = await _usersService.GetUser(UserKey);
+        var user = await _userService.GetUser(UserKey);
         if (!user.WasSuccessful)
         {
             TempData["Error"] = user.Message ?? "An error occurred while fetching user data.";
@@ -107,7 +107,7 @@ public class EditModel(IUsersService usersService, IAuthService authService, ICu
         user.Payload.Email = Email;
         user.Payload.Birthdate = Birthdate;
 
-        var updateResult = await _usersService.Save(user.Payload);
+        var updateResult = await _userService.Save(user.Payload);
         if (!updateResult.WasSuccessful)
         {
             TempData["Error"] = "An error occurred while updating user data. Please try again later.";

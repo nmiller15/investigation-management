@@ -8,7 +8,7 @@ namespace Investigations.Web.Pages;
 
 public class SecureExampleModel : PageModel
 {
-    private readonly IUsersService _usersService;
+    private readonly IUserService _userService;
     private readonly ICurrentUser _currentUser;
 
     // Page data
@@ -23,9 +23,9 @@ public class SecureExampleModel : PageModel
                                 _currentUser.IsAccountOwner() ||
                                 _currentUser.IsSystemAdministrator();
 
-    public SecureExampleModel(IUsersService usersService, ICurrentUser currentUser)
+    public SecureExampleModel(IUserService userService, ICurrentUser currentUser)
     {
-        _usersService = usersService;
+        _userService = userService;
         _currentUser = currentUser;
     }
 
@@ -56,7 +56,7 @@ public class SecureExampleModel : PageModel
         }
 
         // Service remains accessible to all roles, page controls access
-        var usersResponse = await _usersService.GetUsers();
+        var usersResponse = await _userService.GetUsers();
         if (usersResponse.WasSuccessful)
         {
             Users = usersResponse.Payload;
@@ -83,7 +83,7 @@ public class SecureExampleModel : PageModel
         Messages.Add("Multi-role access granted: Can access investigation data");
 
         // Service call example (using UsersService as example)
-        var userResponse = await _usersService.GetUser(_currentUser.UserKey.GetValueOrDefault());
+        var userResponse = await _userService.GetUser(_currentUser.UserKey.GetValueOrDefault());
         if (userResponse.WasSuccessful)
         {
             Messages.Add($"Current user profile: {userResponse.Payload.FirstName} {userResponse.Payload.LastName}");
