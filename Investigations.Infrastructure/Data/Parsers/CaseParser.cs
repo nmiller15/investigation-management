@@ -28,4 +28,3 @@ public class CaseParser : BaseAuditModelParser<Case>
         return Model;
     }
 }
-

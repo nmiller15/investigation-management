@@ -10,4 +10,3 @@ public class StringParser : ISqlDataParser<string>
         return reader.IsDBNull(0) ? string.Empty : reader.GetString(0);
     }
 }
-

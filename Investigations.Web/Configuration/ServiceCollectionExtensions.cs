@@ -1,10 +1,14 @@
+using Investigations.App.Addresses;
 using Investigations.App.Auth;
 using Investigations.App.Cases;
+using Investigations.App.Contacts;
 using Investigations.App.Users;
 using Investigations.Infrastructure.Auth;
+using Investigations.Models.Addresses;
 using Investigations.Models.Auth;
 using Investigations.Models.Cases;
 using Investigations.Models.Configuration;
+using Investigations.Models.Contacts;
 using Investigations.Models.Users;
 using Investigations.Web.Configuration;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -43,6 +47,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICaseRepository, CaseRepository>();
+        services.AddScoped<IAddressRepository, AddressRepository>();
+        services.AddScoped<IContactRepository, ContactRepository>();
         return services;
     }
 
@@ -51,6 +57,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICaseService, CaseService>();
+        services.AddScoped<IAddressService, AddressService>();
+        services.AddScoped<IContactService, ContactService>();
         return services;
     }
 

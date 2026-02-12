@@ -16,7 +16,7 @@ public class EmailSettings : IEmailSettings
     public EmailSettings(IConfiguration configuration)
     {
         var emailSettings = configuration.GetSection("EmailSettings");
-        
+
         Host = emailSettings["Host"] ?? string.Empty;
         Port = int.Parse(emailSettings["Port"] ?? "587");
         Username = emailSettings["Username"] ?? string.Empty;
