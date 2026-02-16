@@ -5,6 +5,7 @@ using Investigations.App.Clients;
 using Investigations.App.Contacts;
 using Investigations.App.Users;
 using Investigations.Infrastructure.Auth;
+using Investigations.Infrastructure.Data.Repositories;
 using Investigations.Models.Addresses;
 using Investigations.Models.Auth;
 using Investigations.Models.Cases;
@@ -12,7 +13,6 @@ using Investigations.Models.Clients;
 using Investigations.Models.Configuration;
 using Investigations.Models.Contacts;
 using Investigations.Models.Users;
-using Investigations.Web.Configuration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Investigations.Web.Configuration;
