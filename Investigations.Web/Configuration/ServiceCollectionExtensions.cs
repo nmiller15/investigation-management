@@ -12,6 +12,7 @@ using Investigations.Models.Cases;
 using Investigations.Models.Clients;
 using Investigations.Models.Configuration;
 using Investigations.Models.Contacts;
+using Investigations.Models.Repositories;
 using Investigations.Models.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -52,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<IAppTaskRepository, AppTaskRepository>();
         return services;
     }
 
