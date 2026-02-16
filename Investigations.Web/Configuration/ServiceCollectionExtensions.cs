@@ -1,12 +1,14 @@
 using Investigations.App.Addresses;
 using Investigations.App.Auth;
 using Investigations.App.Cases;
+using Investigations.App.Clients;
 using Investigations.App.Contacts;
 using Investigations.App.Users;
 using Investigations.Infrastructure.Auth;
 using Investigations.Models.Addresses;
 using Investigations.Models.Auth;
 using Investigations.Models.Cases;
+using Investigations.Models.Clients;
 using Investigations.Models.Configuration;
 using Investigations.Models.Contacts;
 using Investigations.Models.Users;
@@ -49,6 +51,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICaseRepository, CaseRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IContactRepository, ContactRepository>();
+        services.AddScoped<IClientRepository, ClientRepository>();
         return services;
     }
 
@@ -59,6 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICaseService, CaseService>();
         services.AddScoped<IAddressService, AddressService>();
         services.AddScoped<IContactService, ContactService>();
+        services.AddScoped<IClientService, ClientService>();
         return services;
     }
 

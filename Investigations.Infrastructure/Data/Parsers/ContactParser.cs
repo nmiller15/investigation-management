@@ -1,13 +1,12 @@
 using System.Data;
 using Investigations.Infrastructure.Data.Extensions;
 using Investigations.Models.Contacts;
-using Investigations.Models.Data;
 
 namespace Investigations.Infrastructure.Data.Parsers;
 
 public class ContactParser : BaseAuditModelParser<Contact>
 {
-    public Contact Parse(IDataReader reader)
+    public override Contact Parse(IDataReader reader)
     {
         base.Parse(reader);
 
