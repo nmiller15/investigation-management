@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
 using Investigations.Models;
+using Investigations.Features.Account;
 
 namespace Investigations.Pages.Account;
 
-public class EditModel() : PageModel, IValidatableObject
+public class EditModel(Edit.Handler edit) : PageModel, IValidatableObject
 {
     [BindProperty(SupportsGet = true)]
     public int UserKey { get; set; }
@@ -42,35 +43,39 @@ public class EditModel() : PageModel, IValidatableObject
     public bool AllPasswordFieldsFilled => !string.IsNullOrEmpty(CurrentPassword) &&
                                             !string.IsNullOrEmpty(NewPassword);
 
-    public User.Roles Role { get; set; }
+    public string Role { get; set; } = string.Empty;
 
     public async Task<IActionResult> OnGetAsync()
     {
+        var response = await edit.Handle(new Edit.Query
+        {
+            UserKey = UserKey
+        });
+
+        if (!response.WasSuccessful)
+        {
+            TempData["Error"] = response.Message ?? "An error occurred while fetching user data.";
+            return RedirectToPage("/Account/Index");
+        }
+
+        var result = response.Payload;
+
+        if (!result.IsAuthenticated)
+            return RedirectToPage("/Account/Login");
+
+        if (!result.CanEdit)
+        {
+            TempData["Error"] = "You can only edit your own account information.";
+            return RedirectToPage("/Account/Index");
+        }
+
+        FirstName = result.FirstName;
+        LastName = result.LastName;
+        Email = result.Email;
+        Birthdate = result.Birthdate;
+        Role = result.Role;
 
         return Page();
-        // if (!_currentUser.IsAuthenticated)
-        //     return RedirectToPage("/Account/Login");
-        //
-        // if (_currentUser.UserKey != UserKey)
-        // {
-        //     TempData["Error"] = "You can only edit your own account information.";
-        //     return RedirectToPage("/Account/Index");
-        // }
-        //
-        // var user = await _userService.GetUser(UserKey);
-        // if (!user.WasSuccessful)
-        // {
-        //     TempData["Error"] = user.Message ?? "An error occurred while fetching user data.";
-        //     return RedirectToPage("/Account/Index");
-        // }
-        //
-        // FirstName = user.Payload.FirstName;
-        // LastName = user.Payload.LastName;
-        // Email = user.Payload.Email;
-        // Birthdate = user.Payload.Birthdate;
-        // Role = user.Payload.Role;
-        //
-        // return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()

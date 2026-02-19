@@ -13,6 +13,7 @@ builder.Services.AddUtilities();
 builder.Services.AddCookieAuthentication(builder.Environment.IsDevelopment());
 builder.Services.AddUserContext();
 
+builder.Services.AddRepositories();
 builder.Services.AddFeatureHandlers();
 builder.Services.AddApplicationServices();
 

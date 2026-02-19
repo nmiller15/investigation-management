@@ -1,3 +1,4 @@
+using Investigations.Features.Account;
 using Serilog;
 
 namespace Investigations.Models;

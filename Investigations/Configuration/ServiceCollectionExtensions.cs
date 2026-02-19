@@ -14,6 +14,26 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        var handlerTypes = assembly.GetTypes()
+            .Where(t => t.IsClass
+                    && !t.IsAbstract
+                    && t.Namespace != null
+                    && t.Namespace.Contains(".Data.Repositories")
+                    && t.Name.EndsWith("Repository"));
+
+        foreach (var type in handlerTypes)
+        {
+            Log.Debug("Registering repository {HandlerType}", type.Name);
+            services.AddScoped(type);
+        }
+
+        return services;
+    }
+
     public static IServiceCollection AddFeatureHandlers(this IServiceCollection services)
     {
         var assembly = Assembly.GetExecutingAssembly();

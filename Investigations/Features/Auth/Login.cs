@@ -44,7 +44,7 @@ public class Login
             var userExists = !user.IsNew;
             var hash = await _passwordRepository.GetPasswordHash(email);
 
-            if (userExists || !string.IsNullOrEmpty(hash))
+            if (!userExists || string.IsNullOrEmpty(hash))
             {
                 var description = userExists
                         ? "could not get hash"

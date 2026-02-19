@@ -2,6 +2,7 @@ using System.Data;
 using Investigations.Infrastructure.Data.Extensions;
 using Investigations.Models.Data;
 using Npgsql;
+using Serilog;
 
 namespace Investigations.Infrastructure.Data;
 
