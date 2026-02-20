@@ -1,4 +1,3 @@
-using Investigations.Features.Account;
 using Serilog;
 
 namespace Investigations.Models;
@@ -22,14 +21,14 @@ public class MethodResponse<T>
         };
     }
 
-    public static MethodResponse<T> Failure(string message = "Something went wrong.")
+    public static MethodResponse<T> Failure(string message = "Something went wrong.", T payload = default!)
     {
         Log.Warning("MethodResponse<{Type}> Failure: {Message}", typeof(T), message);
         return new MethodResponse<T>
         {
             WasSuccessful = false,
             Message = message,
-            Payload = default(T)!
+            Payload = payload
         };
     }
 

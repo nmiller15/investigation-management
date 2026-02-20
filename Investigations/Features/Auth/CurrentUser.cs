@@ -31,4 +31,10 @@ public sealed class CurrentUser(IHttpContextAccessor http)
     public bool IsSystemAdministrator() => Role == User.Roles.SystemAdministrator;
     public bool IsAccountOwner() => Role == User.Roles.AccountOwner;
     public bool IsInvestigator() => Role == User.Roles.Investigator;
+
+    public bool CanViewAccountList() => IsSystemAdministrator() || IsAccountOwner();
+    public bool CanViewAccount(int userKey) => CanEditAccount(userKey) ||
+                                                    IsAccountOwner();
+    public bool CanEditAccount(int userKey) => UserKey.GetValueOrDefault() == userKey ||
+                                                    IsSystemAdministrator();
 }
