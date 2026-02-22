@@ -28,10 +28,47 @@ dotnet run --project Investigations.Web
 # Run database console application
 dotnet run --project Investigations.Database
 
+# Run with custom environment
+dotnet run --project Investigations.Web --configuration Release
+
+# Run with specific URL
+dotnet run --project Investigations.Web --urls "http://localhost:5000"
+
 # Clean and rebuild
 dotnet clean && dotnet build
 
+# Restore dependencies
+dotnet restore investigation-management.sln
+
+# List all available targets
+dotnet build --list-targets
+
+# Build with detailed logging
+dotnet build -v detailed
+
 # No test projects currently exist - add testing strategy before writing tests
+```
+
+## Testing Commands (When Tests Added)
+
+```bash
+# Run all tests
+dotnet test
+
+# Run tests in specific project
+dotnet test Tests/Investigations.App.Tests
+
+# Run single test by name
+dotnet test --filter "FullyQualifiedName~UserServiceTests.GetUserById"
+
+# Run tests with verbose output
+dotnet test -v detailed
+
+# Run tests with code coverage
+dotnet test --collect:"XPlat Code Coverage"
+
+# Run tests matching pattern
+dotnet test --filter "Category=Unit"
 ```
 
 ## Code Style & Conventions
@@ -56,6 +93,14 @@ dotnet clean && dotnet build
   - System namespaces first, then third-party, then project namespaces
   - Group by namespace, no sorting required (implicit usings enabled)
   - Remove unused usings
+
+### Formatting Rules
+- **Braces**: Use K&R style (opening brace on same line)
+- **Indentation**: 4 spaces (no tabs)
+- **Line length**: Target under 120 characters
+- **File encoding**: UTF-8 with BOM
+- **Newlines**: Unix-style (LF)
+- **Trailing whitespace**: Remove on save
 
 ### Class Design Patterns
 - **Base Classes**: Use `BaseAuditModel` for entities requiring audit trails
@@ -102,6 +147,27 @@ dotnet clean && dotnet build
   - Use integration tests for database operations
   - Mock repositories for unit tests
   - Test both success and failure paths for `MethodResponse<T>`
+- **MethodResponse Pattern**: Always test both success and failure paths:
+  ```csharp
+  // Success path
+  var response = await _service.GetUserByIdAsync(id);
+  Assert.True(response.Success);
+  Assert.NotNull(response.Data);
+  
+  // Failure path
+  var response = await _service.GetUserByIdAsync(invalidId);
+  Assert.False(response.Success);
+  Assert.Null(response.Data);
+  Assert.NotEmpty(response.Message);
+  ```
+
+### Types & Nullable Reference Types
+- **Global Setting**: Nullable reference types are enabled project-wide
+- **Reference Types**: Use `string?` for nullable reference types explicitly
+- **Value Types**: Use `int?` for nullable value types
+- **Null Checks**: Always check for null before accessing properties on potentially null objects
+- **Collections**: Use `IReadOnlyList<T>` for read-only collections, `IList<T>` for modifiable
+- **Records**: Use `record` for immutable DTOs and value objects
 
 ## Development Workflow
 

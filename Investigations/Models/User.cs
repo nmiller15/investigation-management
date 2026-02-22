@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Investigations.Models;
 
 public class User() : BaseAuditModel
@@ -6,8 +8,11 @@ public class User() : BaseAuditModel
     public enum Roles
     {
         Undefined = 0,
+        [Display(Name = "System Administrator")]
         SystemAdministrator = 166,
+        [Display(Name = "Account Owner")]
         AccountOwner = 167,
+        [Display(Name = "Investigator")]
         Investigator = 168
     }
 

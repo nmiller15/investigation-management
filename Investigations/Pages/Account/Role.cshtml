@@ -1,0 +1,23 @@
+@page "/Account/{userKey:int}/Role"
+@model RoleModel
+@{
+    ViewData["Title"] = "Change User Role";
+    Layout = "_Layout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="UserKey" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Role" class="form-label">Select New Role</label>
+        <select asp-for="Role" asp-items="Html.GetEnumSelectList<User.Roles>()" class="form-select">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Update Role</button>
+        <a asp-page="/Account/Index" class="btn btn-outline-secondary ms-2">Cancel</a>
+    </div>
+</form>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using Investigations.Features.Account;
 using Investigations.Features.Auth;
+
 namespace Investigations.Pages.Account;
 
 public class AccountIndexModel(ListAccounts.Handler listAccounts, CurrentUser currentUser) : PageModel

@@ -121,6 +121,13 @@ public class EditModel(EditAccount.Handler editAccount, ChangePassword.Handler c
 
         if (AnyPasswordFieldsFilled && AllPasswordFieldsFilled)
         {
+            if (!currentUser.CanChangePassword(UserKey))
+            {
+                Log.Warning("Unauthorized password change attempt by user {UserKey} on account {TargetUserKey}", _currentUser.UserKey, UserKey);
+                TempData["Error"] = "You can only change your own password.";
+                return RedirectToPage("/Account/Profile", new { userKey = UserKey });
+            }
+
             var passwordResponse = await changePassword.Handle(new ChangePassword.Command
             {
                 UserKey = UserKey,

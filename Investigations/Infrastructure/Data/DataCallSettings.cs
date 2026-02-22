@@ -7,8 +7,10 @@ public class DataCallSettings
     public required string ConnectionString { get; set; }
     public string ProcedureName { get; set; } = string.Empty;
     public string FunctionName { get; set; } = string.Empty;
+    public string SqlQuery { get; set; } = string.Empty;
     public bool IsFunctionCall => !string.IsNullOrEmpty(FunctionName);
     public bool IsProcedureCall => !string.IsNullOrEmpty(ProcedureName);
+    public bool IsSqlQuery => !string.IsNullOrEmpty(SqlQuery);
     public List<DbParam> Parameters = new();
 
     public void AddParameter(string name, object? value)

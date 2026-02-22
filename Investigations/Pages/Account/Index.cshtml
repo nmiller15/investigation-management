@@ -56,6 +56,14 @@
                                            class="btn btn-sm btn-outline-primary">
                                             View Profile
                                         </a>
+                                        @if (@currentUser.CanUpdateRole())
+                                        {
+                                            <a asp-page="/Account/Role" 
+                                               asp-route-userKey="@user.UserKey" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                Change Role
+                                            </a>
+                                        }
                                     </td>
                                 </tr>
                             }

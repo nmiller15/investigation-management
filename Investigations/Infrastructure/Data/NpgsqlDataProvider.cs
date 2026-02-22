@@ -102,4 +102,50 @@ public static class NpgsqlDataProvider
 
         cmd.ExecuteNonQuery();
     }
+
+    public async static Task<List<T>> ExecuteRaw<T>(DataCallSettings dcs, ISqlDataParser<T> parser)
+    {
+        if (!dcs.IsSqlQuery)
+            throw new InvalidOperationException("Called ExecuteRaw on a DataCallSettings without raw SQL.");
+
+        var parameters = dcs.Parameters
+            .Select(p => p.ToNpgsql())
+            .ToArray();
+
+        using var conn = new NpgsqlConnection(dcs.ConnectionString);
+
+        var sql = dcs.SqlQuery;
+        var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddRange(parameters);
+
+        var results = new List<T>();
+
+        conn.Open();
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            results.Add(parser.Parse(reader));
+        }
+
+        return results;
+    }
+
+    public async static Task ExecuteRawNonQuery(DataCallSettings dcs)
+    {
+        if (!dcs.IsSqlQuery)
+            throw new InvalidOperationException("Called ExecuteRaw on a DataCallSettings without raw SQL.");
+
+        var parameters = dcs.Parameters
+            .Select(p => p.ToNpgsql())
+            .ToArray();
+
+        using var conn = new NpgsqlConnection(dcs.ConnectionString);
+
+        var sql = dcs.SqlQuery;
+        var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddRange(parameters);
+
+        conn.Open();
+        cmd.ExecuteNonQuery();
+    }
 }
