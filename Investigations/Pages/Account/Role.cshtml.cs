@@ -1,6 +1,7 @@
 using Investigations.Features.Account;
 using Investigations.Features.Auth;
 using Investigations.Models;
+using Investigations.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
@@ -15,10 +16,12 @@ public class RoleModel(ChangeRole.Handler changeRole, CurrentUser currentUser) :
     [BindProperty(SupportsGet = true)]
     public int UserKey { get; set; }
 
+    public string Name { get; set; } = string.Empty;
+
     [BindProperty]
     public User.Roles Role { get; set; }
 
-    public IActionResult OnGet()
+    public async Task<IActionResult> OnGet()
     {
         if (!_currentUser.IsAuthenticated)
             return RedirectToPage("/Account/Login");
@@ -30,7 +33,15 @@ public class RoleModel(ChangeRole.Handler changeRole, CurrentUser currentUser) :
             return RedirectToPage("/Index");
         }
 
-        Role = _currentUser.Role.GetValueOrDefault();
+        var response = await _changeRole.Handle(new ChangeRole.Query { UserKey = UserKey });
+        if (!response.WasSuccessful)
+        {
+            TempData["Error"] = response.Message ?? "Unable to retrieve user to edit. Please try again later.";
+            return RedirectToPage("/Account/Index");
+        }
+
+        Role = response.Payload.Role;
+        Name = response.Payload.Name;
 
         return Page();
     }
@@ -49,17 +60,16 @@ public class RoleModel(ChangeRole.Handler changeRole, CurrentUser currentUser) :
 
         Log.Debug("Updating role for UserKey {UserKey} to {Role}", UserKey, Role);
 
-        var result = await _changeRole.Handle(new ChangeRole.Command
-        {
-            UserKey = UserKey,
-            Role = Role
-        });
+
+        var result = await _changeRole.Handle(new ChangeRole.Command { UserKey = UserKey, Role = Role });
 
         if (!result.WasSuccessful)
         {
             TempData["Error"] = result.Message ?? "Unable to update user role. Please try again later.";
             return Page();
         }
+
+        TempData["Success"] = $"You have successfully updated the user role to {Role.ToDisplayString()}.";
 
         return RedirectToPage("/Account/Index");
     }

@@ -4,7 +4,7 @@ using Serilog;
 
 namespace Investigations.Pages;
 
-public class IndexModel : PageModel
+public class IndexModel() : PageModel
 {
     public async Task OnGetAsync()
     {

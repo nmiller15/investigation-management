@@ -1,6 +1,4 @@
-CREATE OR REPLACE FUNCTION get_case_by_key(
-    p_case_key INT
-)
+CREATE OR REPLACE FUNCTION get_cases()
 RETURNS SETOF v_cases
 LANGUAGE sql
 STABLE
@@ -28,9 +26,7 @@ AS $$
         vc.updated_by_user_first_name,
         vc.updated_by_user_last_name,
         vc.updated_datetime
-    FROM v_cases AS vc
-    WHERE case_key = p_case_key
-    LIMIT 1;
+    FROM v_cases AS vc;
 $$;
 
-GRANT EXECUTE ON FUNCTION get_case_by_key(INT) TO app_user;
+GRANT EXECUTE ON FUNCTION get_cases() TO app_user;

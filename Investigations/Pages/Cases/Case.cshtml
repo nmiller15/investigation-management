@@ -1,0 +1,131 @@
+@page "{caseKey:int}"
+@model CaseModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = $"Case #{Model.Case.CaseNumber}";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <a asp-page="/Cases/Index" class="btn btn-outline-secondary btn-sm">
+                &larr; Back to Cases
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-1">Case #@Model.Case.CaseNumber</h2>
+            <span class="badge @(Model.Case.IsActive ? "bg-success" : "bg-secondary")">
+                @(Model.Case.IsActive ? "Active" : "Inactive")
+            </span>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12 mb-3">
+            <h5 class="text-muted border-bottom pb-2">Overview</h5>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Subject</div>
+                <div class="card-body">
+                    <p class="card-text mb-0"><strong>@Model.Case.SubjectFirstName @Model.Case.SubjectLastName</strong></p>
+                    <p class="card-text text-muted small">Key: @Model.Case.SubjectKey</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Client</div>
+                <div class="card-body">
+                    <p class="card-text mb-0"><strong>@Model.Case.ClientName</strong></p>
+                    <p class="card-text text-muted small">Key: @Model.Case.ClientKey</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Case Type</div>
+                <div class="card-body">
+                    <p class="card-text mb-0"><strong>@Model.Case.CaseTypeShortDescription</strong></p>
+                    <p class="card-text text-muted small">@Model.Case.CaseTypeDescription</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Case.DateOfReferral.HasValue)
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <p class="mb-1"><strong>Date Referred:</strong> @Model.Case.DateOfReferral?.ToString("MMMM d, yyyy")</p>
+            </div>
+        </div>
+    }
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Synopsis</span>
+                    <button class="btn btn-outline-primary btn-sm" disabled>Edit Synopsis</button>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrWhiteSpace(Model.Case.Synopsis))
+                    {
+                        <p class="card-text">@Model.Case.Synopsis</p>
+                    }
+                    else
+                    {
+                        <p class="card-text text-muted fst-italic">No synopsis provided.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Contacts</span>
+                    <button class="btn btn-outline-primary btn-sm" disabled>Add Contact</button>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted fst-italic">Coming soon...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Tasks</span>
+                    <button class="btn btn-outline-primary btn-sm" disabled>+ Add Task</button>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted fst-italic">Coming soon...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <hr />
+            <p class="text-muted small mb-0">
+                <strong>Created:</strong> @Model.Case.InsertedByUserKey on @Model.Case.InsertedDateTime.ToString("g")
+            </p>
+            @if (Model.Case.UpdatedDateTime.HasValue)
+            {
+                <p class="text-muted small mb-0">
+                    <strong>Updated:</strong> @Model.Case.UpdatedByUserKey on @Model.Case.UpdatedDateTime?.ToString("g")
+                </p>
+            }
+        </div>
+    </div>
+</div>

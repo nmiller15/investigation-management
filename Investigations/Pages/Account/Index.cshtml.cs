@@ -26,7 +26,11 @@ public class AccountIndexModel(ListAccounts.Handler listAccounts, CurrentUser cu
         if (!_currentUser.CanViewAccountList())
             return RedirectToPage("/Account/Profile", new { userKey = _currentUser.UserKey.GetValueOrDefault() });
 
-        var response = await _listAccounts.Handle(new ListAccounts.Query());
+        var response = await _listAccounts.Handle(new ListAccounts.Query
+        {
+            SortColumn = SortColumn,
+            SortDirection = SortDirection
+        });
 
         if (!response.WasSuccessful)
         {
