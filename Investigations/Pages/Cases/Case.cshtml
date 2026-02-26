@@ -1,8 +1,8 @@
-@page "{caseKey:int}"
+@page "/Cases/{caseKey:int}"
 @model CaseModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = $"Case #{Model.Case.CaseNumber}";
+    ViewData["Title"] = $"#{Model.Case.CaseNumber}";
 }
 
 <div class="container-fluid">
@@ -18,7 +18,7 @@
         <div class="col">
             <h2 class="mb-1">Case #@Model.Case.CaseNumber</h2>
             <span class="badge @(Model.Case.IsActive ? "bg-success" : "bg-secondary")">
-                @(Model.Case.IsActive ? "Active" : "Inactive")
+                @Model.Case.Status
             </span>
         </div>
     </div>
@@ -31,7 +31,8 @@
             <div class="card h-100">
                 <div class="card-header">Subject</div>
                 <div class="card-body">
-                    <p class="card-text mb-0"><strong>@Model.Case.SubjectFirstName @Model.Case.SubjectLastName</strong></p>
+                    <p class="card-text mb-0"><strong>@Model.Case.SubjectName</strong>
+                    </p>
                     <p class="card-text text-muted small">Key: @Model.Case.SubjectKey</p>
                 </div>
             </div>
@@ -49,18 +50,18 @@
             <div class="card h-100">
                 <div class="card-header">Case Type</div>
                 <div class="card-body">
-                    <p class="card-text mb-0"><strong>@Model.Case.CaseTypeShortDescription</strong></p>
+                    <p class="card-text mb-0"><strong>@Model.Case.CaseTypeCode</strong></p>
                     <p class="card-text text-muted small">@Model.Case.CaseTypeDescription</p>
                 </div>
             </div>
         </div>
     </div>
 
-    @if (Model.Case.DateOfReferral.HasValue)
+    @if (!string.IsNullOrEmpty(Model.Case.DateOfReferral))
     {
         <div class="row mb-4">
             <div class="col-12">
-                <p class="mb-1"><strong>Date Referred:</strong> @Model.Case.DateOfReferral?.ToString("MMMM d, yyyy")</p>
+                <p class="mb-1"><strong>Date Referred:</strong> @Model.Case.DateOfReferral</p>
             </div>
         </div>
     }
@@ -108,7 +109,37 @@
                     <button class="btn btn-outline-primary btn-sm" disabled>+ Add Task</button>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-muted fst-italic">Coming soon...</p>
+                    @foreach (var task in Model.Tasks)
+                    {
+                        var id = $"task-checkbox-{task.TaskKey}";
+
+                        <div class="mb-3 p-3 border rounded d-flex align-items-start gap-3">
+
+                            <input type="checkbox" id="@id" data-taskKey="@task.TaskKey" data-caseKey="@Model.CaseKey"
+                                   class="form-check-input mt-1 task-checkbox" @(task.IsCompleted ? "checked" : "") />
+
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-1 @(task.IsCompleted ? "text-decoration-line-through text-muted" : "")">
+                                        @task.TaskName
+                                    </h6>
+                                    <small class="text-muted">Due: @task.DueDate</small>
+                                </div>
+
+                                <p class="mb-2 text-muted">
+                                    @task.TaskDescription
+                                </p>
+
+                                <small class="text-muted">
+                                    Assigned to:
+                                    <a asp-page="/Account/Profile" asp-route-userKey="@(task.AssignedToUserKey)">
+                                        @task.AssignedToUser
+                                    </a>
+                                </small>
+                            </div>
+
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -118,14 +149,23 @@
         <div class="col-12">
             <hr />
             <p class="text-muted small mb-0">
-                <strong>Created:</strong> @Model.Case.InsertedByUserKey on @Model.Case.InsertedDateTime.ToString("g")
+                <strong>Created by:</strong> <a asp-page="/Account/Profile"
+                                                asp-route-userKey=@Model.Case.InsertedByUserKey>@Model.Case.InsertedByUser</a>
+                on @Model.Case.InsertedOnDateTime
             </p>
-            @if (Model.Case.UpdatedDateTime.HasValue)
+            @if (!string.IsNullOrEmpty(Model.Case.UpdatedOnDateTime))
             {
                 <p class="text-muted small mb-0">
-                    <strong>Updated:</strong> @Model.Case.UpdatedByUserKey on @Model.Case.UpdatedDateTime?.ToString("g")
+                    <strong>Updated by:</strong> <a asp-page="/Account/Profile"
+                                                    asp-route-userKey=@Model.Case.UpdatedByUserKey>@Model.Case.UpdatedByUser</a>
+                    on @Model.Case.UpdatedOnDateTime
                 </p>
             }
         </div>
     </div>
 </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="@Url.Content("/Pages/Cases/Case.cshtml.js")"></script>
+}

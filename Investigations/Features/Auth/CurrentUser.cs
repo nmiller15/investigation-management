@@ -39,4 +39,7 @@ public sealed class CurrentUser(IHttpContextAccessor http)
                                                     IsSystemAdministrator();
     public bool CanChangePassword(int userKey) => UserKey.GetValueOrDefault() == userKey;
     public bool CanUpdateRole() => IsAccountOwner() || IsSystemAdministrator();
+
+    public bool CanAssignTasksToAnyCase() => Role == User.Roles.SystemAdministrator || Role == User.Roles.AccountOwner;
+    public bool CanAssignTasksToOtherUsers() => Role == User.Roles.SystemAdministrator || Role == User.Roles.AccountOwner;
 }
