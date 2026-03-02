@@ -26,11 +26,12 @@ public class ChangeRole
 
     public record Command
     {
-        public int UserKey { get; set; }
-        public User.Roles Role { get; set; }
+        public required int UserKey { get; set; }
+        public required User.Roles Role { get; set; }
+        public required int CurrentUserKey { get; set; }
     }
 
-    public class Handler(IConnectionStrings connectionStrings, CurrentUser currentUser)
+    public class Handler(IConnectionStrings connectionStrings)
     {
         private readonly IConnectionStrings _connectionStrings = connectionStrings;
 
@@ -83,7 +84,7 @@ public class ChangeRole
             };
 
             dcs.AddParameter("user_key", command.UserKey);
-            dcs.AddParameter("updated_by_user_key", currentUser.UserKey);
+            dcs.AddParameter("updated_by_user_key", command.CurrentUserKey);
             dcs.AddParameter("role_code_key", (int)command.Role);
 
             try

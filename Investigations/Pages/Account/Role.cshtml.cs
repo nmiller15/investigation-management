@@ -61,7 +61,12 @@ public class RoleModel(ChangeRole.Handler changeRole, CurrentUser currentUser) :
         Log.Debug("Updating role for UserKey {UserKey} to {Role}", UserKey, Role);
 
 
-        var result = await _changeRole.Handle(new ChangeRole.Command { UserKey = UserKey, Role = Role });
+        var result = await _changeRole.Handle(new ChangeRole.Command
+        {
+            UserKey = UserKey,
+            Role = Role,
+            CurrentUserKey = _currentUser.UserKey.GetValueOrDefault()
+        });
 
         if (!result.WasSuccessful)
         {

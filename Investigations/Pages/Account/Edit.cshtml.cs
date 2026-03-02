@@ -100,7 +100,8 @@ public class EditModel(EditAccount.Handler editAccount, ChangePassword.Handler c
             FirstName = FirstName,
             LastName = LastName,
             Email = Email,
-            Birthdate = Birthdate.GetValueOrDefault()
+            Birthdate = Birthdate.GetValueOrDefault(),
+            CurrentUserKey = _currentUser.UserKey.GetValueOrDefault()
         });
 
         var result = response.Payload;
@@ -132,7 +133,8 @@ public class EditModel(EditAccount.Handler editAccount, ChangePassword.Handler c
             {
                 UserKey = UserKey,
                 CurrentPassword = CurrentPassword!,
-                NewPassword = NewPassword!
+                NewPassword = NewPassword!,
+                CurrentUserKey = _currentUser.UserKey.GetValueOrDefault()
             });
 
             if (!passwordResponse.WasSuccessful)

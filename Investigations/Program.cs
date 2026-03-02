@@ -54,3 +54,6 @@ app.Run();
 Log.Information("Closing sesison...");
 
 Log.CloseAndFlush();
+
+// May be required for integration tests
+// public partial class Program { }

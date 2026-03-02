@@ -26,7 +26,8 @@ public static class Program
             .OrderBy(f => f);
 
         var pendingMigrations = migrationFiles
-            .Where(version => !applied.Contains(Path.GetFileNameWithoutExtension(version)))
+            .Where(version => !applied.Contains(Path.GetFileNameWithoutExtension(version)) ||
+                              Path.GetFileNameWithoutExtension(version).Equals("001_codes"))
             .ToList();
 
         Console.WriteLine($"Applying {pendingMigrations.Count} pending migrations...");

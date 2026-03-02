@@ -13,21 +13,19 @@ public class ChangePassword
     public class Command
     {
         public int UserKey { get; set; }
-        public string Email { get; set; } = string.Empty;
         public string CurrentPassword { get; set; } = string.Empty;
         public string NewPassword { get; set; } = string.Empty;
+        public int CurrentUserKey { get; set; }
     }
 
     public class Handler(
             PasswordRepository passwordRepository,
             PasswordHasher passwordHasher,
-            IConnectionStrings connectionStrings,
-            CurrentUser currentUser)
+            IConnectionStrings connectionStrings)
     {
         private readonly PasswordRepository _passwordRepository = passwordRepository;
         private readonly PasswordHasher _passwordHasher = passwordHasher;
         private readonly IConnectionStrings _connectionStrings = connectionStrings;
-        private readonly CurrentUser _currentUser = currentUser;
 
         public async Task<MethodResponse<bool>> Handle(Command command)
         {
@@ -42,7 +40,7 @@ public class ChangePassword
             var newHash = _passwordHasher.Hash(command.NewPassword);
             await _passwordRepository.UpdatePassword(command.UserKey,
                     newHash,
-                    _currentUser.UserKey.GetValueOrDefault());
+                    command.CurrentUserKey);
 
             return MethodResponse<bool>.Success(true, "Password changed successfully.");
         }

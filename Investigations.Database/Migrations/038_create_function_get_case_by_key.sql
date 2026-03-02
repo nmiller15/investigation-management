@@ -21,12 +21,12 @@ AS $$
         vc.case_type_description,
         vc.synopsis,
         vc.inserted_by_user_key,
-        vc.inserted_by_user_first_name,
-        vc.inserted_by_user_last_name,
+        vc.inserted_by_first_name,
+        vc.inserted_by_last_name,
         vc.inserted_datetime,
         vc.updated_by_user_key,
-        vc.updated_by_user_first_name,
-        vc.updated_by_user_last_name,
+        vc.updated_by_first_name,
+        vc.updated_by_last_name,
         vc.updated_datetime
     FROM v_cases AS vc
     WHERE case_key = p_case_key

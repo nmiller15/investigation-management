@@ -14,16 +14,12 @@ public class ListAccounts
 
         public record Result
         {
-            public int CurrentUserKey { get; set; }
-            public bool IsAuthenticated { get; set; }
-            public bool CanViewAccountList { get; set; }
             public List<Account> Accounts { get; set; } = [];
         }
-
     }
 
 
-    public class Handler(UserRepository userRepository, CurrentUser currentUser)
+    public class Handler(UserRepository userRepository)
     {
         public async Task<MethodResponse<Query.Result>> Handle(Query request)
         {
@@ -47,7 +43,6 @@ public class ListAccounts
 
             return MethodResponse<Query.Result>.Success(new Query.Result
             {
-                CurrentUserKey = currentUser.UserKey.GetValueOrDefault(),
                 Accounts = users.Select(Account.From).ToList(),
             });
         }

@@ -28,12 +28,12 @@ public class EditAccount
         public required string LastName { get; set; }
         public required string Email { get; set; }
         public required DateTime Birthdate { get; set; }
+        public required int CurrentUserKey { get; set; }
     }
 
-    public class Handler(UserRepository userRepository, CurrentUser currentUser)
+    public class Handler(UserRepository userRepository)
     {
         private readonly UserRepository _userRepository = userRepository;
-        private readonly CurrentUser _currentUser = currentUser;
 
         public async Task<MethodResponse<Query.Result>> Handle(Query query)
         {
@@ -58,19 +58,11 @@ public class EditAccount
                 LastName = command.LastName,
                 Email = command.Email,
                 Birthdate = command.Birthdate
-            }, null, _currentUser.UserKey.GetValueOrDefault());
+            }, null, command.CurrentUserKey);
 
             return userKey > 0
                 ? MethodResponse<bool>.Success(true)
                 : MethodResponse<bool>.Failure("Failed to update account information.");
-        }
-
-        public bool UserCanEdit(int userKey)
-        {
-            var editingCurrentUser = _currentUser.IsAuthenticated && _currentUser.UserKey == userKey;
-            return _currentUser.IsAuthenticated && (editingCurrentUser ||
-                                                           _currentUser.IsAccountOwner() ||
-                                                           _currentUser.IsSystemAdministrator());
         }
     }
 }
