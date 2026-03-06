@@ -4,9 +4,7 @@ public class Client : BaseAuditModel
 {
     public int ClientKey { get; set; } = 0;
     public string ClientName { get; set; } = string.Empty;
-    public int PrimaryContactKey { get; set; } = -1;
-    public string PrimaryContactFirstName { get; set; } = string.Empty;
-    public string PrimaryContactLastName { get; set; } = string.Empty;
+    public Contact PrimaryContact { get; set; } = new();
 
     public bool IsNew => ClientKey == 0;
 }

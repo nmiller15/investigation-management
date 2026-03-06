@@ -59,10 +59,10 @@ public class CaseRepository(IConnectionStrings connectionStrings) : BaseSqlRepos
         dcs.AddParameter("p_case_key", case_.CaseKey);
         dcs.AddParameter("p_case_number", case_.CaseNumber);
         dcs.AddParameter("p_is_active", case_.IsActive);
-        dcs.AddParameter("p_subject_key", case_.SubjectKey);
-        dcs.AddParameter("p_client_key", case_.ClientKey);
+        dcs.AddParameter("p_subject_key", case_.Subject.SubjectKey);
+        dcs.AddParameter("p_client_key", case_.Client.ClientKey);
         dcs.AddParameter("p_date_of_referral", case_.DateOfReferral);
-        dcs.AddParameter("p_case_type_code_key", case_.CaseTypeCodeKey);
+        dcs.AddParameter("p_case_type_code_key", (int)case_.Type);
         dcs.AddParameter("p_synopsis", case_.Synopsis);
     }
 }

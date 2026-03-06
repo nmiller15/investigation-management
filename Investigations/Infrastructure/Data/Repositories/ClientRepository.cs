@@ -66,6 +66,6 @@ public class ClientRepository(IConnectionStrings connectionStrings)
     public static void AddClientParameters(Client client, DataCallSettings dcs)
     {
         dcs.AddParameter("p_client_name", client.ClientName);
-        dcs.AddParameter("p_primary_contact_key", client.PrimaryContactKey);
+        dcs.AddParameter("p_primary_contact_key", client.PrimaryContact.ContactKey);
     }
 }

@@ -12,9 +12,9 @@ public class ClientParser : BaseAuditModelParser<Client>
 
         Model.ClientKey = reader.ParseInt32("client_key");
         Model.ClientName = reader.ParseString("client_name");
-        Model.PrimaryContactKey = reader.ParseInt32("primary_contact_key");
-        Model.PrimaryContactFirstName = reader.ParseString("primary_contact_first_name");
-        Model.PrimaryContactLastName = reader.ParseString("primary_contact_last_name");
+        Model.PrimaryContact.ContactKey = reader.ParseInt32("primary_contact_key");
+        Model.PrimaryContact.FirstName = reader.ParseString("primary_contact_first_name");
+        Model.PrimaryContact.LastName = reader.ParseString("primary_contact_last_name");
 
         return Model;
     }

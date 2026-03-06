@@ -2,73 +2,46 @@
 
 This file contains guidelines for AI coding agents working on this investigation management system.
 
-## Project Overview
+**Note:** This repository is being phased out. Do not create new features here.
 
-This is a .NET 10.0 ASP.NET Core web application following clean architecture principles with PostgreSQL database. The system manages investigation cases with users, contacts, subjects, tasks, and related entities.
+## Architecture - Vertical Slices (Preferred) & Legacy Clean Architecture
 
-**Architecture Layers:**
-- `Investigations.Web/` - Presentation layer (ASP.NET Core Razor Pages)
-- `Investigations.App/` - Application/Business logic layer  
-- `Investigations.Models/` - Domain/Entities layer
-- `Investigations.Infrastructure/` - Infrastructure layer (data access, auth)
-- `Investigations.Database/` - Database utilities/console app
+This codebase is in transition. Newer code uses **Vertical Slices** while older code follows **Clean Architecture**.
 
-## Build & Development Commands
+### Vertical Slices (Preferred)
+- **Location**: `Investigations/Features/`
+- **Pattern**: Query/Command records + Handler + DTOs + Parsers per feature
+- **Data Access**: Direct SQL via `NpgsqlDataProvider.ExecuteRaw()` with `DataCallSettings`
+- **Example structure**:
+  ```
+  Features/Auth/Login.cs, Register.cs
+  Features/Tasks/CreateTask.cs
+  Features/Cases/ListCases.cs
+  ```
+
+### Legacy (Being Phased Out)
+- `Investigations/Infrastructure/Data/Repositories/` - Repositories (will be removed)
+
+## Build Commands
 
 ```bash
-# Build entire solution
 dotnet build investigation-management.sln
-
-# Build specific project
-dotnet build Investigations.Web/Investigations.Web.csproj
-
-# Run web application (development)
-dotnet run --project Investigations.Web
-
-# Run database console application
+dotnet build Investigations/Investigations.csproj
+dotnet run --project Investigations
 dotnet run --project Investigations.Database
-
-# Run with custom environment
-dotnet run --project Investigations.Web --configuration Release
-
-# Run with specific URL
-dotnet run --project Investigations.Web --urls "http://localhost:5000"
-
-# Clean and rebuild
 dotnet clean && dotnet build
-
-# Restore dependencies
 dotnet restore investigation-management.sln
-
-# List all available targets
-dotnet build --list-targets
-
-# Build with detailed logging
-dotnet build -v detailed
-
-# No test projects currently exist - add testing strategy before writing tests
 ```
 
-## Testing Commands (When Tests Added)
+## Testing Commands
 
 ```bash
-# Run all tests
 dotnet test
-
-# Run tests in specific project
-dotnet test Tests/Investigations.App.Tests
-
-# Run single test by name
-dotnet test --filter "FullyQualifiedName~UserServiceTests.GetUserById"
-
-# Run tests with verbose output
+dotnet test Investigations.Tests.Unit
+dotnet test Investigations.Tests.Integration
+dotnet test --filter "FullyQualifiedName~CreateTaskTests.CreateTask"
 dotnet test -v detailed
-
-# Run tests with code coverage
 dotnet test --collect:"XPlat Code Coverage"
-
-# Run tests matching pattern
-dotnet test --filter "Category=Unit"
 ```
 
 ## Code Style & Conventions
@@ -77,123 +50,87 @@ dotnet test --filter "Category=Unit"
 - **Target Framework**: .NET 10.0
 - **Nullable Reference Types**: Enabled globally
 - **Implicit Usings**: Enabled
-- **Package References**: Use latest stable versions
 
 ### Naming Conventions
-- **Classes/Interfaces**: PascalCase (e.g., `UsersRepository`, `IUsersService`)
-- **Methods/Properties**: PascalCase (e.g., `GetUserById`, `FirstName`)
-- **Private Fields**: camelCase with underscore prefix (e.g., `_connectionStrings`)
-- **Constants**: PascalCase (e.g., `DefaultTimeout`)
-- **Namespaces**: Match folder structure (e.g., `Investigations.App.Users`)
+- **Classes/Interfaces**: PascalCase (e.g., `UsersRepository`)
+- **Methods/Properties**: PascalCase (e.g., `GetUserById`)
+- **Private Fields**: camelCase with underscore (e.g., `_connectionStrings`)
+- **Namespaces**: Match folder structure
 
-### Code Organization
-- **File-per-class**: One class per file
-- **Namespace declarations**: First line, no blank line before
-- **Using statements**: 
-  - System namespaces first, then third-party, then project namespaces
-  - Group by namespace, no sorting required (implicit usings enabled)
-  - Remove unused usings
+### Vertical Slice Structure
+Each feature file has:
+- **Query/Command records**: Request input with nested Response records
+- **Handler class**: `Handle(Query)` and/or `Handle(Command)` methods
+- **DTOs**: Nested classes for data transfer
+- **Parsers**: Implement `ISqlDataParser<T>`
 
-### Formatting Rules
-- **Braces**: Use K&R style (opening brace on same line)
-- **Indentation**: 4 spaces (no tabs)
-- **Line length**: Target under 120 characters
+```csharp
+public class CreateTask
+{
+    public record Query { ... }
+    public record Command { ... }
+
+    public class Handler(IConnectionStrings connectionStrings)
+    {
+        public async Task<MethodResponse<Query.Response>> Handle(Query query) { ... }
+    }
+}
+```
+
+### Formatting
+- **Braces**: K&R style
+- **Indentation**: 4 spaces
+- **Line length**: Under 120 characters
 - **File encoding**: UTF-8 with BOM
-- **Newlines**: Unix-style (LF)
-- **Trailing whitespace**: Remove on save
 
-### Class Design Patterns
-- **Base Classes**: Use `BaseAuditModel` for entities requiring audit trails
-- **Response Wrapper**: Use `MethodResponse<T>` for service method returns
-- **Repository Pattern**: Inherit from `BaseSqlRepository`, implement interfaces
-- **Dependency Injection**: Register services in `ServiceCollectionExtensions`
-- **Service Lifetime**: Use `Scoped` for repositories/services, `Singleton` for configuration
+### Response Wrapper
+- **Always use**: `MethodResponse<T>`
+- **Success**: `MethodResponse<T>.Success(data)`
+- **Failure**: `MethodResponse<T>.Failure(message)`
 
 ### Error Handling
-- **Service Layer**: Return `MethodResponse<T>.Failure(message)` for errors
-- **Web Layer**: Use `ExceptionHandlingMiddleware` in production
-- **Validation**: Check for null payloads in success responses
-- **Logging**: Use Serilog for structured logging
+- **Service Layer**: Return `MethodResponse<T>.Failure(message)`
+- **Web Layer**: Use `ExceptionHandlingMiddleware`
+- **Validation**: Use `Validate(out string? message)` pattern on Query/Command
+- **Logging**: Use Serilog
 
 ### Database & Data Access
-- **Connection**: Use `IConnectionStrings` injection, access via `BaseSqlRepository`
-- **SQL Operations**: Use stored procedures/functions via `DataCallSettings`
-- **Parameterization**: Use `DbParam` extensions for safe SQL parameters
-- **Data Parsing**: Implement `ISqlDataParser<T>` for custom object mapping
+- **Use**: `NpgsqlDataProvider.ExecuteRaw()` with `DataCallSettings`
+- **Parameters**: Use `dcs.AddParameter()` for safe parameterized queries
+- **Parsers**: Implement `ISqlDataParser<T>`
 
-### Authentication & Security
-- **Scheme**: Cookie-based authentication with secure settings
-- **Security**: 
-  - `HttpOnly = true`
-  - `SecurePolicy = Always` 
-  - `SameSite = Lax`
-  - 8-hour sliding expiration
-- **Authorization**: Use ASP.NET Core authorization attributes
+### Authentication
+- **Scheme**: Cookie-based
+- **Security**: `HttpOnly = true`, `SecurePolicy = Always`, `SameSite = Lax`, 8-hour sliding expiration
 
-### Async Programming
-- **Database Operations**: Use async/await consistently
-- **Service Methods**: Return `Task<MethodResponse<T>>`
-- **Naming**: Append `Async` suffix to async methods
-
-### Configuration Management
-- **Connection Strings**: Environment-specific appsettings files
-- **Extensions**: Use extension methods in `ConfigurationExtensions`
-- **Dependency Setup**: Centralized in `ServiceCollectionExtensions`
+### Types & Nullable
+- **Reference Types**: Use `string?` for nullable
+- **Value Types**: Use `int?` for nullable
+- **Collections**: `IReadOnlyList<T>` for read-only, `IList<T>` for modifiable
+- **Records**: Use `record` for immutable DTOs
 
 ### Testing Guidelines
-- **No Tests Currently**: This project lacks test infrastructure
-- **Recommended Setup**:
-  - Add xUnit test projects for each layer
-  - Use integration tests for database operations
-  - Mock repositories for unit tests
-  - Test both success and failure paths for `MethodResponse<T>`
-- **MethodResponse Pattern**: Always test both success and failure paths:
+- **Integration Tests**: Use `TestFixture` from `Investigations.Tests.Integration/Utilities/`
+- **MethodResponse Pattern**: Always test success and failure paths:
   ```csharp
-  // Success path
-  var response = await _service.GetUserByIdAsync(id);
+  var response = await _handler.Handle(query);
   Assert.True(response.Success);
   Assert.NotNull(response.Data);
-  
-  // Failure path
-  var response = await _service.GetUserByIdAsync(invalidId);
-  Assert.False(response.Success);
-  Assert.Null(response.Data);
-  Assert.NotEmpty(response.Message);
   ```
-
-### Types & Nullable Reference Types
-- **Global Setting**: Nullable reference types are enabled project-wide
-- **Reference Types**: Use `string?` for nullable reference types explicitly
-- **Value Types**: Use `int?` for nullable value types
-- **Null Checks**: Always check for null before accessing properties on potentially null objects
-- **Collections**: Use `IReadOnlyList<T>` for read-only collections, `IList<T>` for modifiable
-- **Records**: Use `record` for immutable DTOs and value objects
 
 ## Development Workflow
 
 ### Adding New Features
-1. **Domain Model**: Add entity in `Investigations.Models/`, inherit from `BaseAuditModel` if needed
-2. **Interface**: Define repository/service interfaces in appropriate `Interfaces/` folder
-3. **Implementation**: 
-   - Repository in `Investigations.Infrastructure/Data/`
-   - Service in `Investigations.App/[FeatureName]/`
-4. **Registration**: Add to `ServiceCollectionExtensions`
-5. **Web Layer**: Add Razor Page or API endpoint if needed
+1. Create folder `Investigations/Features/[FeatureName]/`
+2. Add feature.cs with Query/Command records, Handler, DTOs, Parsers
+3. Add Razor Page in `Investigations/Pages/`
 
-### Database Changes
-- **Schema**: Use PostgreSQL stored procedures/functions
-- **Connection**: All access through `BaseSqlRepository` pattern
-- **Parameters**: Use `DbParam` extensions for type safety
-
-### Code Quality Checks
-- **Build**: Always run `dotnet build` before committing
-- **Nullable**: Ensure all nullable warnings are addressed
-- **Dependencies**: Keep NuGet packages updated to latest stable versions
+### Code Quality
+- Run `dotnet build` before committing
+- Address all nullable warnings
 
 ## Important Notes
-
-- **No Linting Configured**: Consider adding EditorConfig or StyleCop for consistent formatting
-- **Database Console App**: `Investigations.Database` appears incomplete
-- **Logging**: Serilog configured with Console, File, and HTTP sinks
-- **Production Ready**: Exception handling and security configurations in place
-- **Clean Architecture**: Follows SOLID principles with clear layer separation
+- **Repository Status**: Being phased out - use direct SQL via `NpgsqlDataProvider`
+- **No Linting**: Consider adding EditorConfig or StyleCop
+- **Logging**: Serilog with Console, File, and HTTP sinks
+- **Single Project**: All code in `Investigations/` (not layered)
