@@ -27,7 +27,9 @@ public class CaseModel(ViewCase.Handler viewCase, CurrentUser currentUser) : Pag
         }
 
         Case = CaseViewModel.From(response.Payload.Case);
-        Tasks = TaskViewModel.From(response.Payload.Tasks);
+        Tasks = TaskViewModel.From(response.Payload.Tasks)
+            .OrderByDescending(t => DateTime.TryParse(t.DueDate, out var dueDate) ? dueDate : DateTime.MinValue)
+            .ToList();
 
         return Page();
     }
@@ -100,7 +102,9 @@ public class CaseModel(ViewCase.Handler viewCase, CurrentUser currentUser) : Pag
                 IsCompleted = taskRow.IsCompleted,
                 TaskName = taskRow.TaskName,
                 TaskDescription = taskRow.TaskDescription,
-                DueDate = taskRow.DueDate.ToString("MMMM dd, yyyy"),
+                DueDate = taskRow.DueDate.HasValue
+                    ? taskRow.DueDate.Value.ToString("MMMM dd, yyyy")
+                    : "No due date",
                 AssignedToUserKey = taskRow.AssignedToUserKey,
                 AssignedToUser = taskRow.AssignedToFirstName + " " + taskRow.AssignedToLastName
             }).ToList();

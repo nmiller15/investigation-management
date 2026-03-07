@@ -106,7 +106,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>Tasks</span>
-                    <button class="btn btn-outline-primary btn-sm" disabled>+ Add Task</button>
+                    <a asp-page="/Tasks/Create" asp-route-SourcedCaseKey="@Model.CaseKey"
+                       class="btn btn-outline-primary btn-sm">+ Add Task</a>
                 </div>
                 <div class="card-body">
                     @foreach (var task in Model.Tasks)

@@ -47,9 +47,10 @@ public class ViewCase
             dcs.SqlQuery = """
                 SELECT 
                     task_key, is_completed, task_name, task_description, assigned_to_user_key, assigned_to_first_name,
-                    assigned_to_last_name, due_date
+                    assigned_to_last_name, due_date, inserted_datetime
                 FROM v_tasks
-                WHERE case_key = @case_key;
+                WHERE case_key = @case_key
+                ORDER BY due_date DESC, inserted_datetime DESC;
                 """;
 
             var taskRows = await NpgsqlDataProvider.ExecuteRaw(dcs, new TaskRowParser());
@@ -123,10 +124,11 @@ public class ViewCase
         public bool IsCompleted { get; set; }
         public string TaskName { get; set; } = string.Empty;
         public string TaskDescription { get; set; } = string.Empty;
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public int AssignedToUserKey { get; set; }
         public string AssignedToFirstName { get; set; } = string.Empty;
         public string AssignedToLastName { get; set; } = string.Empty;
+        public DateTime InsertedDateTime { get; set; }
     }
 
     public class TaskRowParser : ISqlDataParser<TaskRow>
@@ -139,10 +141,13 @@ public class ViewCase
                 IsCompleted = reader.ParseBool("is_completed"),
                 TaskName = reader.ParseString("task_name"),
                 TaskDescription = reader.ParseString("task_description"),
-                DueDate = reader.ParseDateTime("due_date"),
+                DueDate = reader.ParseDateTime("due_date").Equals(DateTime.MinValue)
+                    ? null
+                    : reader.ParseDateTime("due_date"),
                 AssignedToUserKey = reader.ParseInt32("assigned_to_user_key"),
                 AssignedToFirstName = reader.ParseString("assigned_to_first_name"),
                 AssignedToLastName = reader.ParseString("assigned_to_last_name"),
+                InsertedDateTime = reader.ParseDateTime("inserted_datetime"),
             };
         }
     }
