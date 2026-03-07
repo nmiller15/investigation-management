@@ -1,0 +1,56 @@
+@page
+@model TaskCreateModel
+@{
+    ViewData["Title"] = "Create Task";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <h2>@ViewData["Title"]</h2>
+        <hr />
+
+        <form method="post">
+            <div class="mt-2 form-group">
+                <label asp-for="TaskName"></label>
+                <input asp-for="TaskName" class="form-control" />
+            </div>
+
+            <div class="mt-2 form-group">
+                <label asp-for="TaskDescription"></label>
+                <textarea asp-for="TaskDescription" class="form-control"></textarea>
+            </div>
+
+            <div class="mt-2 form-group">
+                @Html.LabelFor(m => m.SelectedCaseKey)
+                <select asp-for="SelectedCaseKey" asp-items="Model.AssignableCases" class="form-control">
+                    <option value="">Select a case...</option>
+                </select>
+            </div>
+
+            <div class="mt-2 form-group">
+                @Html.LabelFor(m => m.SelectedUserKey)
+                <select asp-for="SelectedUserKey" asp-items="Model.AssignableUsers" class="form-control">
+                    <option value="">Select a user...</option>
+                </select>
+            </div>
+
+            <div class="mt-2 form-group">
+                <label asp-for="DueDate"></label>
+                <input asp-for="DueDate" type="date" class="form-control" />
+            </div>
+
+            <div class="mt-4 form-group">
+                <button type="submit" class="btn btn-primary">Create Task</button>
+                @if (@Model.SourcedCaseKey.HasValue)
+                {
+                    <a asp-page="/Cases/Case" asp-route-CaseKey="@Model.SourcedCaseKey" class="btn btn-secondary">Cancel</a>
+                }
+                else
+                {
+                    <a asp-page="/Index" asp-route-CaseKey="@Model.SourcedCaseKey" class="btn btn-secondary">Cancel</a>
+                }
+                <div>
+                </form>
+            </div>
+        </div>
