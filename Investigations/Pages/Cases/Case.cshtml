@@ -2,7 +2,7 @@
 @model CaseModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = $"#{Model.Case.CaseNumber}";
+    ViewData["Title"] = $"Case # - {Model.Case.CaseNumber}";
 }
 
 <div class="container-fluid">
@@ -11,22 +11,17 @@
             <a asp-page="/Cases/Index" class="btn btn-outline-secondary btn-sm">
                 &larr; Back to Cases
             </a>
-        </div>
-    </div>
 
-    <div class="row mb-4">
-        <div class="col">
-            <h2 class="mb-1">Case #@Model.Case.CaseNumber</h2>
             <span class="badge @(Model.Case.IsActive ? "bg-success" : "bg-secondary")">
                 @Model.Case.Status
             </span>
         </div>
     </div>
-
     <div class="row mb-4">
-        <div class="col-12 mb-3">
+        <div class="d-flex col-12 mb-3">
             <h5 class="text-muted border-bottom pb-2">Overview</h5>
         </div>
+
         <div class="col-md-4 mb-3">
             <div class="card h-100">
                 <div class="card-header">Subject</div>

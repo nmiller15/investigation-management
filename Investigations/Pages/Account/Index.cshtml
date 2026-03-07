@@ -9,7 +9,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2>Accounts</h2>
             @if (Model.Accounts.Any())
             {
                 <div class="table-responsive">
@@ -56,7 +55,7 @@
                                            class="btn btn-sm btn-outline-primary">
                                             View Profile
                                         </a>
-                                        @if (@currentUser.CanUpdateRole())
+                                        @if (currentUser.CanUpdateRole())
                                         {
                                             <a asp-page="/Account/Role" 
                                                asp-route-userKey="@user.UserKey" 

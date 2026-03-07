@@ -1,3 +1,4 @@
+@using Investigations.Utilities
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,91 +18,102 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Investigations.Web</title>
+    <title>@ViewData["Title"] - Oliver Investigations</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Investigations.Web.styles.css" asp-append-version="true" />
 </head>
 
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container position-relative">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Investigations.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Account/Index">Account</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/SecureExample">Secure Example</a>
-                        </li>
-                    </ul>
-                </div>
-                @if (displayLogin)
-                {
-                    <div class="position-absolute end-0">
-                        @if (currentUser.IsAuthenticated)
-                        {
-                            <a href="/Account/Logout" class="btn btn-outline-danger">Logout (@currentUser.Email)</a>
+<body style="overflow-x: hidden;">
+    <div class="container-fluid m-0 p-0">
+        <div class="row">
+            <div class="col-2 position-fixed vh-100 d-flex flex-column flex-shrink-0 p-3 bg-dark">
+                <header class="vh-5 p-2 bg-dark text-white fs-4 lh-1">
+                    <a asp-page="/" class="text-decoration-none text-reset"><span class="mt-0">Oliver Investigations</span></a>
+                </header>
+                <nav class="mb-auto mt-4">
+                    <ul class="nav nav-pills flex-column">
+                        @{
+                            var navItems = NavigationItems.GetNavigationItems();
+                            var currentRoute = ViewContext.RouteData.Values["page"] as string ?? string.Empty;
                         }
-                        else
+                        @foreach (var navItem in @navItems)
                         {
-                            <a href="/Account/Login" class="btn btn-outline-primary me-2">Login</a>
+                            var isCurrentRoute = currentRoute.Equals(navItem.PageRoute, StringComparison.OrdinalIgnoreCase);
+                            var classText = $"nav-link {(isCurrentRoute ? "active" : "text-white")}";
+
+                            <li class="nav-item">
+                                <a asp-page="@navItem.PageRoute" class=@classText>@navItem.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+                <div class="mt-auto mb-2 nav nav-pills d-flex flex-column">
+                    @{
+                        var isProfileRoute = currentRoute.Equals("/Account/Profile", StringComparison.OrdinalIgnoreCase);
+                        var profileClassText = $"nav-link {(isProfileRoute ? "active" : "text-white")}";
+                    }
+                    <li class="nav-item">
+                        <a asp-page="/Account/Profile" 
+                           asp-route-userKey="@currentUser.UserKey.GetValueOrDefault()"
+                           class="@profileClassText">
+                           Profile
+                       </a>
+                    </li>
+                    <a asp-page="/Account/Logout"
+                       class="nav-link text-white">
+                       Logout
+                   </a>
+                </div>
+            </div>
+            <div class="col-10 offset-2 pb-3" style="min-height: 90vh">
+                <div class="container-fluid p-0">
+                    <div class="row bg-gray sticky-top border-bottom mb-3 p-2 bg-light">
+                        <h1 style="font-size: 2rem;">@ViewData["Title"]</h1>
+                        @if (ViewData["Description"] != null)
+                        {
+                            <p><small>@ViewData["Description"]</small></p>
                         }
                     </div>
-                }
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @* TempData Messages *@
 
-            <div class="row">
-                <div class="col-md-6 mx-auto">
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                            <strong>Success!</strong> @TempData["Success"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    }
+                    <div class="row ps-0">
+                        <div class="col-md-6 mx-auto">
+                            @if (TempData["Success"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                    <strong>Success!</strong> @TempData["Success"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
 
-                    @if (TempData["Error"] != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                            <strong>Error!</strong> @TempData["Error"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    }
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    <strong>Error!</strong> @TempData["Error"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
 
-                    @if (TempData["Info"] != null)
-                    {
-                        <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                            <strong>Info:</strong> @TempData["Info"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            @if (TempData["Info"] != null)
+                            {
+                                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                                    <strong>Info:</strong> @TempData["Info"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
+
+                    <main role="main">
+                        @RenderBody()
+                    </main>
                 </div>
             </div>
-
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="col-10 offset-2 border-top footer text-muted">
         <div class="container">
             &copy; 2026 - Investigations - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
