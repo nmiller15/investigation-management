@@ -6,6 +6,7 @@ public static class NavigationItems
     {
             new NavigationItem("Dashboard", "/Index"),
             new NavigationItem("Cases", "/Cases/Index"),
+            new NavigationItem("Clients", "/Clients/Index"),
             new NavigationItem("Accounts", "/Account/Index"),
     };
 }

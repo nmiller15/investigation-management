@@ -11,7 +11,6 @@ INSERT INTO contacts (
     work_phone,
     home_phone,
     preferred_contact_method_code_key,
-    notes,
     inserted_by_user_key
 ) VALUES (
     'John',
@@ -21,7 +20,6 @@ INSERT INTO contacts (
     '(555) 123-4567',
     NULL,
     (SELECT code_key FROM codes WHERE code_type = 'CONTAC' AND code = 'WORK'),
-    'Primary contact for corporate investigations',
     100
 );
 
@@ -47,7 +45,6 @@ INSERT INTO contacts (
     work_phone,
     home_phone,
     preferred_contact_method_code_key,
-    notes,
     inserted_by_user_key
 ) VALUES (
     'Sarah',
@@ -57,7 +54,6 @@ INSERT INTO contacts (
     '(555) 987-6543',
     NULL,
     (SELECT code_key FROM codes WHERE code_type = 'CONTAC' AND code = 'WORK'),
-    'Primary contact for insurance claims investigations',
     100
 );
 
@@ -83,7 +79,6 @@ INSERT INTO contacts (
     work_phone,
     home_phone,
     preferred_contact_method_code_key,
-    notes,
     inserted_by_user_key
 ) VALUES (
     'Jane',
@@ -93,7 +88,6 @@ INSERT INTO contacts (
     '(555) 246-8135',
     NULL,
     (SELECT code_key FROM codes WHERE code_type = 'CONTAC' AND code = 'MOBILE'),
-    'Primary attorney contact for legal investigations',
     100
 );
 

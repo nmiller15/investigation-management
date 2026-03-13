@@ -1,6 +1,7 @@
 using Bogus;
 using Investigations.Models;
 using Npgsql;
+using static Investigations.IContactMethod;
 
 namespace Investigations.Tests.Integration.Utilities;
 
@@ -29,11 +30,7 @@ public static class CaseSeeder
         var sampleContact = new Faker<Contact>()
             .RuleFor(c => c.FirstName, f => f.Name.FirstName())
             .RuleFor(c => c.LastName, f => f.Name.LastName())
-            .RuleFor(c => c.Email, f => f.Internet.Email())
-            .RuleFor(c => c.MobilePhone, f => f.Phone.PhoneNumber())
-            .RuleFor(c => c.WorkPhone, f => f.Phone.PhoneNumber())
-            .RuleFor(c => c.HomePhone, f => f.Phone.PhoneNumber())
-            .RuleFor(c => c.Notes, f => f.Lorem.Sentence())
+            .RuleFor(c => c.Email, f => new EmailAddress(f.Internet.Email()))
             .Generate();
 
         var sampleClient = new Faker<Client>()
@@ -62,16 +59,13 @@ public static class CaseSeeder
                 sampleCase.Subject = sampleSubject;
             }
 
-            await using (var cmd = new NpgsqlCommand("INSERT INTO contacts (first_name, last_name, email, mobile_phone, work_phone, home_phone, notes, inserted_datetime, inserted_by_user_key) "
-                        + "VALUES (@contact_first_name, @contact_last_name, @contact_email, @contact_mobile_phone, @contact_work_phone, @contact_home_phone, @contact_notes, CURRENT_TIMESTAMP, 100) "
+            await using (var cmd = new NpgsqlCommand("INSERT INTO contacts (first_name, last_name, email, inserted_datetime, inserted_by_user_key) "
+                        + "VALUES (@contact_first_name, @contact_last_name, @contact_email, CURRENT_TIMESTAMP, 100) "
                         + "RETURNING contact_key;", connection))
             {
                 cmd.Parameters.AddWithValue("contact_first_name", sampleContact.FirstName);
                 cmd.Parameters.AddWithValue("contact_last_name", sampleContact.LastName);
-                cmd.Parameters.AddWithValue("contact_email", sampleContact.Email);
-                cmd.Parameters.AddWithValue("contact_mobile_phone", sampleContact.MobilePhone);
-                cmd.Parameters.AddWithValue("contact_work_phone", sampleContact.WorkPhone);
-                cmd.Parameters.AddWithValue("contact_home_phone", sampleContact.HomePhone);
+                cmd.Parameters.AddWithValue("contact_email", sampleContact.Email?.Address ?? string.Empty);
                 cmd.Parameters.AddWithValue("contact_notes", sampleContact.Notes);
                 sampleContact.ContactKey = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 sampleClient.PrimaryContact = sampleContact;
